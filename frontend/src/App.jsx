@@ -168,12 +168,16 @@ function App() {
     };
 
     const handleCreateShipment = async (plan) => {
+        setLoading(true);
         try {
-            await axios.post('/api/shipments', plan);
-            fetchData();
-            alert("Shipment Planned Successfully!");
+            const res = await axios.post('/api/shipments', plan);
+            await fetchData();
+            alert("✅ SHIPMENT DISPATCHED: All POs consolidated and synced to ERP.");
         } catch (err) {
             console.error(err);
+            alert("❌ Sync Error: Could not reach ERP or Database. Please check connection.");
+        } finally {
+            setLoading(false);
         }
     };
 

@@ -7,6 +7,7 @@ import json
 from ..database import get_db
 from .. import models, schemas
 from ..services.optimization import optimize_shipments
+from ..services.erpnext import erpnext_service
 from ..services.pdf_parser import extract_po_from_pdf
 from ..services.erpnext import erpnext_service
 from ..services.performance import get_supplier_performance
@@ -219,7 +220,6 @@ def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_
             po.status = "Consolidated"
             # Push update back to ERPNext
             try:
-                from ..services.erpnext import erpnext_service
                 erpnext_service.update_purchase_order_status(po.po_number, "Consolidated")
             except Exception as e:
                 print(f"Failed to sync PO {po.po_number} to ERP: {e}")
