@@ -59,7 +59,8 @@ class Shipment(Base):
     vehicle_type = Column(String(100))
     total_weight = Column(Float)
     total_cbm = Column(Float)
-    recommendation = Column(String(255))
+    location = Column(String(100), nullable=True)
+    route = Column(String(255), nullable=True)
     status = Column(String(50), default="Proposed") # Proposed, Dispatched
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 

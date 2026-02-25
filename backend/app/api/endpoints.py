@@ -180,6 +180,8 @@ def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_
         total_weight=shipment.total_weight,
         total_cbm=shipment.total_cbm,
         recommendation=shipment.recommendation,
+        location=shipment.location,
+        route=shipment.route,
         status=shipment.status
     )
     db.add(db_shipment)

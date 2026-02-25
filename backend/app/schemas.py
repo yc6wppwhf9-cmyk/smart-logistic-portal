@@ -49,6 +49,9 @@ class ShipmentBase(BaseModel):
     total_cbm: float
     recommendation: str
     status: str
+    location: Optional[str] = None
+    route: Optional[str] = None
+    po_ids: List[int] = []
 
 class ShipmentCreate(ShipmentBase):
     po_ids: List[int]

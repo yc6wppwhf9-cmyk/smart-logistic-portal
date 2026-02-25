@@ -44,6 +44,7 @@ function App() {
     const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || 'admin'); // 'admin' or 'supplier'
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('userRole'));
     const [searchTerm, setSearchTerm] = useState('');
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
     // Simulate current supplier name if logged in as supplier
     const [currentSupplierName, setCurrentSupplierName] = useState("Abc Raw Material");
@@ -55,6 +56,11 @@ function App() {
         location: 'Mumbai',
         items: [{ item_code: '', item_name: '', hsn_code: '', uom: 'Pcs', quantity: 1, rate: 0, weight_per_unit: 0, cbm_per_unit: 0 }]
     });
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -267,12 +273,49 @@ function App() {
                                         </div>
                                     )}
 
+                                    {userRole === 'admin' && (
+                                        <div className="glass-card p-6">
+                                            <h2 className="text-lg font-bold mb-6 flex items-center gap-2 uppercase tracking-tight text-white"><Box className="text-brand-400" size={20} /> RM HEALTH STATUS</h2>
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full text-xs">
+                                                    <thead>
+                                                        <tr className="text-slate-500 border-b border-white/5 uppercase font-bold tracking-widest text-[10px]">
+                                                            <th className="py-3 text-left">MATERIAL NAME</th>
+                                                            <th className="py-3 text-center">QTY</th>
+                                                            <th className="py-3 text-right">SUPPLY STATUS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-white/5">
+                                                        {pos.filter(p => p.status === 'Pending').flatMap(p => p.items).slice(0, 5).map((item, i) => {
+                                                            const po = pos.find(p => p.id === item.po_id);
+                                                            const grade = performance[po?.supplier_name]?.grade || 'B';
+                                                            return (
+                                                                <tr key={i} className="hover:bg-white/5 transition-all">
+                                                                    <td className="py-3 font-bold">{item.item_name}</td>
+                                                                    <td className="py-3 text-center font-mono">{item.quantity} {item.uom}</td>
+                                                                    <td className="py-3 text-right">
+                                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${grade === 'A' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-500 animate-pulse'}`}>
+                                                                            {grade === 'A' ? 'SECURE' : 'CRITICAL'}
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                        {pos.filter(p => p.status === 'Pending').length === 0 && (
+                                                            <tr><td colSpan="3" className="py-8 text-center text-slate-500 italic uppercase">All materials are secured</td></tr>
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="glass-card p-6">
                                         <h2 className="text-lg font-bold mb-6 flex items-center gap-2"><Clock className="text-brand-500" size={20} /> Recent Activity Timeline</h2>
                                         <div className="space-y-4">
                                             {displayPos.slice(0, 5).map(p => (
                                                 <div key={p.id} className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-brand-500/30 transition-all group">
-                                                    <div className={`status-signal ${p.status === 'Cancelled' ? 'status-signal-red' : p.date_change_count > 1 ? 'status-signal-yellow' : 'status-signal-green'}`} />
+                                                    <div className={`status-signal ${p.status === 'Cancelled' ? 'status-signal-red' : p.status === 'Consolidated' ? 'status-signal-blue' : p.date_change_count >= 2 ? 'status-signal-yellow' : 'status-signal-green'}`} />
                                                     <div className="flex-grow">
                                                         <div className="font-bold flex items-center gap-2">
                                                             {p.po_number}
@@ -374,7 +417,7 @@ function App() {
                                             {filteredPos.map(p => (
                                                 <tr key={p.id} className="hover:bg-white/5 transition-colors">
                                                     <td className="px-6 py-4">
-                                                        <div className={`status-signal ${p.status === 'Cancelled' ? 'status-signal-red' : p.date_change_count >= 2 ? 'status-signal-yellow' : 'status-signal-green'}`} />
+                                                        <div className={`status-signal ${p.status === 'Cancelled' ? 'status-signal-red' : p.status === 'Consolidated' ? 'status-signal-blue' : p.date_change_count >= 2 ? 'status-signal-yellow' : 'status-signal-green'}`} />
                                                     </td>
                                                     <td className="px-6 py-4 font-bold">{p.po_number}</td>
                                                     {userRole === 'admin' && (
@@ -481,9 +524,9 @@ function App() {
                                     <div className="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/20 flex flex-col md:flex-row justify-between items-center gap-4">
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><CheckCircle size={18} /></div>
-                                            <span className="font-bold text-slate-200">{plan.recommendation}</span>
+                                            <span className="font-bold text-slate-200">AI PLAN: {plan.recommendation}</span>
                                         </div>
-                                        <button onClick={() => handleCreateShipment(plan)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-emerald-500/30">Execute Logistics Plan <ArrowRight size={18} /></button>
+                                        <button onClick={() => handleCreateShipment(plan)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-emerald-500/30">DISPATCH TO BIHAR FACTORY <ArrowRight size={18} /></button>
                                     </div>
                                 </div>
                             ))}
@@ -496,17 +539,31 @@ function App() {
                             <h1 className="text-2xl font-bold">System Settings</h1>
                             <div className="glass-card p-6 space-y-8">
                                 <div className="space-y-4">
-                                    <h3 className="font-bold flex items-center gap-2 text-brand-400"><Shield size={18} /> Identity & Access</h3>
+                                    <h3 className="font-bold flex items-center gap-2 text-brand-400 uppercase tracking-widest text-xs"><Box size={18} /> Display Preferences</h3>
+                                    <div className="p-6 bg-white/5 rounded-2xl border border-white/5 flex items-center justify-between">
+                                        <div>
+                                            <div className="text-sm font-bold uppercase tracking-tight">Active Theme: {theme.toUpperCase()}</div>
+                                            <p className="text-xs text-slate-500">Toggle between professional dark and high-clarity light mode</p>
+                                        </div>
+                                        <div className="flex bg-black/40 p-1 rounded-xl border border-white/10">
+                                            <button onClick={() => setTheme('dark')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${theme === 'dark' ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20' : 'text-slate-500 hover:text-white'}`}>DARK</button>
+                                            <button onClick={() => setTheme('light')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${theme === 'light' ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20' : 'text-slate-500 hover:text-white'}`}>LIGHT</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <h3 className="font-bold flex items-center gap-2 text-brand-400 uppercase tracking-widest text-xs"><Shield size={18} /> Identity & Access</h3>
                                     <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
                                         <div className="flex justify-between items-center mb-4">
                                             <div>
-                                                <div className="text-sm font-bold flex items-center gap-2">
+                                                <div className="text-sm font-bold flex items-center gap-2 uppercase tracking-tight">
                                                     {userRole === 'admin' ? <Shield size={14} className="text-brand-500" /> : <User size={14} className="text-brand-500" />}
-                                                    {userRole.toUpperCase()} SESSION
+                                                    {userRole} SESSION ACTIVE
                                                 </div>
                                                 {userRole === 'supplier' && <p className="text-xs text-slate-500 mt-1">Authenticated as {currentSupplierName}</p>}
                                             </div>
-                                            <button onClick={handleLogout} className="text-xs bg-red-500/10 text-red-500 px-3 py-1.5 rounded-lg border border-red-500/20 font-bold hover:bg-red-500/20 transition-all">Sign Out</button>
+                                            <button onClick={handleLogout} className="text-xs bg-red-500/10 text-red-500 px-3 py-1.5 rounded-lg border border-red-500/20 font-bold hover:bg-red-500/20 transition-all uppercase">Sign Out</button>
                                         </div>
                                         <p className="text-[10px] text-slate-500 italic uppercase font-bold tracking-widest">SECURED BY HSCVPL ENTERPRISE</p>
                                     </div>

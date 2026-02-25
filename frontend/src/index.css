@@ -2,20 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --brand-color: #0ea5e9;
+    --bg-main: #020617;
+    --text-main: #f1f5f9;
+}
+
+[data-theme='light'] {
+    --brand-color: #0284c7;
+    --bg-main: #ffffff;
+    --text-main: #0f172a;
+}
+
 @layer base {
     body {
-        @apply bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500/30;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        @apply font-sans antialiased selection:bg-brand-500/30;
         font-family: 'Plus Jakarta Sans', sans-serif;
+        transition: background-color 0.3s, color 0.3s;
     }
 }
 
 @layer components {
     .glass-card {
-        @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+        background-color: var(--card-bg, rgba(255, 255, 255, 0.05));
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
 
     .input-field {
-        @apply bg-black/20 border border-white/10 rounded-lg py-2 px-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all;
+        background-color: var(--bg-main);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        color: var(--text-main);
+        @apply transition-all focus:ring-2 focus:ring-brand-500/50 focus:outline-none;
     }
 
     .btn-primary {
