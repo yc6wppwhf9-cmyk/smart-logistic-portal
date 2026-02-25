@@ -12,3 +12,4 @@ python-dotenv
 pdfplumber
 psycopg2-binary
 gunicorn
+requests

@@ -8,8 +8,13 @@ from ..database import get_db
 from .. import models, schemas
 from ..services.optimization import optimize_shipments
 from ..services.pdf_parser import extract_po_from_pdf
+from ..services.erpnext import erpnext_service
 
 router = APIRouter()
+
+@router.post("/erpnext/sync")
+def sync_erpnext(db: Session = Depends(get_db)):
+    return erpnext_service.fetch_purchase_orders(db)
 
 @router.get("/purchase-orders", response_model=List[schemas.PurchaseOrder])
 def read_pos(db: Session = Depends(get_db)):

@@ -18,7 +18,8 @@ import {
     Box,
     Scale,
     Maximize2,
-    FileUp
+    FileUp,
+    RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -119,6 +120,25 @@ function App() {
         }
     };
 
+    const handleSyncERPNext = async () => {
+        setLoading(true);
+        try {
+            const res = await axios.post('/api/erpnext/sync');
+            if (res.data.error) {
+                alert("ERPNext Error: " + res.data.error);
+            } else {
+                alert(res.data.message);
+                fetchPos();
+                fetchOptimization();
+            }
+        } catch (err) {
+            console.error("Error syncing ERPNext", err);
+            alert("Failed to sync with ERPNext. Please check your credentials.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleCreateShipment = async (plan) => {
         try {
             await axios.post('/api/shipments', plan);
@@ -181,10 +201,20 @@ function App() {
                                     <h2 className="text-lg font-semibold flex items-center gap-2">
                                         <Plus className="text-brand-500" size={20} /> Add Purchase Order
                                     </h2>
-                                    <label className="cursor-pointer bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 p-2 rounded-lg transition-colors title='Bulk Upload (JSON/Excel)'">
-                                        <FileUp size={18} />
-                                        <input type="file" className="hidden" accept=".json,.xlsx,.xls,.pdf" onChange={handleFileUpload} />
-                                    </label>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={handleSyncERPNext}
+                                            disabled={loading}
+                                            className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 p-2 rounded-lg transition-colors"
+                                            title="Sync from ERPNext"
+                                        >
+                                            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
+                                        </button>
+                                        <label className="cursor-pointer bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 p-2 rounded-lg transition-colors" title="Bulk Upload (JSON/Excel/PDF)">
+                                            <FileUp size={18} />
+                                            <input type="file" className="hidden" accept=".json,.xlsx,.xls,.pdf" onChange={handleFileUpload} />
+                                        </label>
+                                    </div>
                                 </div>
                                 <div className="p-6 space-y-4">
                                     <div className="space-y-4">
