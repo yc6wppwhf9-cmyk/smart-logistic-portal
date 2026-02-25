@@ -14,7 +14,14 @@ if DATABASE_URL:
     if DATABASE_URL.startswith("mysql://"):
         DATABASE_URL = DATABASE_URL.replace("mysql://", "mysql+pymysql://", 1)
     SQLALCHEMY_DATABASE_URL = DATABASE_URL
-    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+    # Added pool_pre_ping and pool_recycle to handle cloud database connection timeouts
+    engine = create_engine(
+        SQLALCHEMY_DATABASE_URL, 
+        pool_pre_ping=True, 
+        pool_recycle=300,
+        pool_size=10,
+        max_overflow=20
+    )
 elif os.getenv("DB_TYPE") == "mysql":
     USER = os.getenv("MYSQL_USER", "root")
     PASSWORD = os.getenv("MYSQL_PASSWORD", "")
@@ -23,11 +30,19 @@ elif os.getenv("DB_TYPE") == "mysql":
     DB_NAME = os.getenv("MYSQL_DB", "logistics_db")
     
     SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB_NAME}"
-    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+    engine = create_engine(
+        SQLALCHEMY_DATABASE_URL, 
+        pool_pre_ping=True, 
+        pool_recycle=300,
+        pool_size=10,
+        max_overflow=20
+    )
 else:
     SQLALCHEMY_DATABASE_URL = "sqlite:///./logistics.db"
     engine = create_engine(
-        SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+        SQLALCHEMY_DATABASE_URL, 
+        connect_args={"check_same_thread": False},
+        pool_pre_ping=True
     )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
