@@ -172,10 +172,11 @@ function App() {
         try {
             const res = await axios.post('/api/shipments', plan);
             await fetchData();
-            alert("✅ SHIPMENT DISPATCHED: All POs consolidated and synced to ERP.");
+            alert("✅ SHIPMENT DISPATCHED: All POs consolidated and synced.");
         } catch (err) {
             console.error(err);
-            alert("❌ Sync Error: Could not reach source or database. Please check connection.");
+            const detail = err.response?.data?.detail || err.message;
+            alert(`❌ Dispatch Error: ${detail}`);
         } finally {
             setLoading(false);
         }
