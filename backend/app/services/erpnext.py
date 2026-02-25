@@ -94,4 +94,35 @@ class ERPNextService:
         except Exception as e:
             return {"error": str(e)}
 
+    def update_purchase_order_status(self, po_number: str, status: str):
+        if not self.url or not self.api_key or not self.api_secret:
+            return {"error": "ERPNext credentials not configured"}
+            
+        endpoint = f"{self.url}/api/resource/Purchase Order/{po_number}"
+        
+        # We try to update a custom field if it exists, or add a comment as a fallback
+        # Typical custom field naming in ERPNext: portal_supply_status
+        payload = {
+            "custom_portal_supply_status": status
+        }
+        
+        try:
+            # 1. Try to update the custom field
+            response = requests.put(endpoint, headers=self.headers, json=payload)
+            
+            # 2. Also add a comment regardless for the history timeline
+            comment_endpoint = f"{self.url}/api/method/frappe.desk.form.utils.add_comment"
+            comment_payload = {
+                "reference_doctype": "Purchase Order",
+                "reference_name": po_number,
+                "content": f"<b>Portal Update:</b> Supply status changed to <b>{status}</b>",
+                "comment_email": "portal-ai@hscvpl.com",
+                "comment_by": "Logistics AI Portal"
+            }
+            requests.post(comment_endpoint, headers=self.headers, json=comment_payload)
+            
+            return {"message": f"Successfully updated ERPNext for {po_number}"}
+        except Exception as e:
+            return {"error": str(e)}
+
 erpnext_service = ERPNextService()

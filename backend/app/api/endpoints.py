@@ -47,7 +47,14 @@ def update_po_status(po_id: int, payload: dict, db: Session = Depends(get_db)):
         
     db_po.status = new_status
     db.commit()
-    return {"message": f"PO status updated to {new_status}", "status": new_status}
+    
+    # Push update back to ERPNext
+    try:
+        erpnext_service.update_purchase_order_status(db_po.po_number, new_status)
+    except:
+        pass # Don't block core flow if ERP update fails
+        
+    return {"message": f"PO status updated to {new_status} and synced to ERPNext", "status": new_status}
 
 @router.patch("/purchase-orders/{po_id}/delivery-date")
 def update_delivery_date(po_id: int, payload: dict, db: Session = Depends(get_db)):
