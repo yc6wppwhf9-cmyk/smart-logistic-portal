@@ -9,8 +9,8 @@ from .. import models, schemas
 from ..services.optimization import optimize_shipments
 from ..services.erpnext import erpnext_service
 from ..services.pdf_parser import extract_po_from_pdf
-from ..services.erpnext import erpnext_service
 from ..services.performance import get_supplier_performance
+from fastapi import BackgroundTasks
 
 router = APIRouter()
 
@@ -198,13 +198,13 @@ def read_shipments(db: Session = Depends(get_db)):
     return db.query(models.Shipment).all()
 
 @router.post("/shipments", response_model=schemas.Shipment)
-def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_db)):
+def create_shipment(shipment: schemas.ShipmentCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     db_shipment = models.Shipment(
         dispatch_date=shipment.dispatch_date,
         vehicle_type=shipment.vehicle_type,
         total_weight=shipment.total_weight,
         total_cbm=shipment.total_cbm,
-        recommendation=shipment.recommendation,
+        recommendation=shipment.recommendation or "Standard Optimization",
         location=shipment.location,
         route=shipment.route,
         status=shipment.status
@@ -213,19 +213,14 @@ def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(db_shipment)
     
-    # Update PO status to Consolidated and push to ERP
+    # Update PO status and associate with shipment
     for po_id in shipment.po_ids:
         po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.id == po_id).first()
         if po:
             po.status = "Consolidated"
-            # Push update back to source
-            try:
-                erpnext_service.update_purchase_order_status(po.po_number, "Consolidated")
-            except Exception as e:
-                print(f"Failed to sync PO {po.po_number}: {e}")
-            
-            # Add to association table
             db_shipment.purchase_orders.append(po)
+            # Push update to source system in background to prevent timeout
+            background_tasks.add_task(erpnext_service.update_purchase_order_status, po.po_number, "Consolidated")
             
     db.commit()
     db.refresh(db_shipment)
