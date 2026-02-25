@@ -139,6 +139,22 @@ function App() {
         }
     };
 
+    const handleDeleteAll = async () => {
+        if (!window.confirm("Are you sure you want to delete all POs in the portal? This will not affect ERPNext.")) return;
+        setLoading(true);
+        try {
+            await axios.delete('/api/purchase-orders');
+            alert("All POs deleted.");
+            fetchPos();
+            fetchOptimization();
+        } catch (err) {
+            console.error("Error deleting POs", err);
+            alert("Failed to delete POs.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleCreateShipment = async (plan) => {
         try {
             await axios.post('/api/shipments', plan);
@@ -209,6 +225,14 @@ function App() {
                                             title="Sync from ERPNext"
                                         >
                                             <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
+                                        </button>
+                                        <button
+                                            onClick={handleDeleteAll}
+                                            disabled={loading}
+                                            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 p-2 rounded-lg transition-colors"
+                                            title="Clear All POs"
+                                        >
+                                            <Trash2 size={18} />
                                         </button>
                                         <label className="cursor-pointer bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 p-2 rounded-lg transition-colors" title="Bulk Upload (JSON/Excel/PDF)">
                                             <FileUp size={18} />
