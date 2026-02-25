@@ -20,6 +20,13 @@ def sync_erpnext(db: Session = Depends(get_db)):
 def read_pos(db: Session = Depends(get_db)):
     return db.query(models.PurchaseOrder).all()
 
+@router.delete("/purchase-orders")
+def delete_all_pos(db: Session = Depends(get_db)):
+    db.query(models.Item).delete()
+    db.query(models.PurchaseOrder).delete()
+    db.commit()
+    return {"message": "All Purchase Orders and items deleted successfully"}
+
 @router.post("/purchase-orders", response_model=schemas.PurchaseOrder)
 def create_po(po: schemas.PurchaseOrderCreate, db: Session = Depends(get_db)):
     db_po = models.PurchaseOrder(
