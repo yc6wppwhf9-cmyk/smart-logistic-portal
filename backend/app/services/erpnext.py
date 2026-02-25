@@ -100,10 +100,10 @@ class ERPNextService:
             
         endpoint = f"{self.url}/api/resource/Purchase Order/{po_number}"
         
-        # We try to update a custom field if it exists, or add a comment as a fallback
-        # Typical custom field naming in ERPNext: portal_supply_status
+        # We try to update multiple possible field names to be safe
         payload = {
-            "custom_portal_supply_status": status
+            "custom_portal_supply_status": status,
+            "custom_portal_status": status
         }
         
         try:
