@@ -10,6 +10,28 @@ from apscheduler.schedulers.background import BackgroundScheduler
 # Create tables
 Base.metadata.create_all(bind=engine)
 
+def fix_database_schema():
+    from sqlalchemy import text
+    with engine.connect() as conn:
+        # Add missing columns to purchase_orders if they don't exist
+        for col_def in [
+            "expected_delivery_date DATE",
+            "date_change_count INTEGER DEFAULT 0",
+            "supplier_user_id INTEGER"
+        ]:
+            col_name = col_def.split()[0]
+            try:
+                # Use sub-query to check column existence for general compatibility
+                conn.execute(text(f"ALTER TABLE purchase_orders ADD COLUMN {col_def}"))
+                conn.commit()
+                print(f"Added missing column: {col_name}")
+            except Exception:
+                # Column likely already exists
+                pass
+
+# Run schema fixing
+fix_database_schema()
+
 def auto_sync_job():
     db = SessionLocal()
     try:
