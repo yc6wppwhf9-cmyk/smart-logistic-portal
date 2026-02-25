@@ -55,8 +55,7 @@ class ERPNextService:
                     location=po_detail.get('ship_to_name') or "Bihar" # Map from Genesis "Ship To"
                 )
                 db.add(db_po)
-                db.commit()
-                db.refresh(db_po)
+                db.flush() # Populate ID without committing transaction
 
                 # Add Items
                 for item in po_detail.get('items', []):

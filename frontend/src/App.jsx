@@ -409,7 +409,7 @@ function App() {
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-xs font-semibold text-brand-400">{p.items.length} items</div>
+                                                <div className="text-xs font-semibold text-brand-400">{p.items?.length || 0} items</div>
                                                 <div className="text-[10px] text-slate-600">Mumbai</div>
                                             </div>
                                         </div>
@@ -513,7 +513,7 @@ function App() {
                                                             <Package size={16} className="text-slate-500" />
                                                             <span className="text-xs text-slate-400">PO Count</span>
                                                         </div>
-                                                        <div className="text-lg font-bold tracking-tight">{plan.po_ids.length} <span className="text-sm font-normal text-slate-500 italic">Orders</span></div>
+                                                        <div className="text-lg font-bold tracking-tight">{plan.po_ids?.length || 0} <span className="text-sm font-normal text-slate-500 italic">Orders</span></div>
                                                     </div>
                                                 </div>
 

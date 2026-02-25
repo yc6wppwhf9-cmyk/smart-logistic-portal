@@ -67,39 +67,64 @@ async def upload_purchase_orders(file: UploadFile = File(...), db: Session = Dep
         if not isinstance(data, list):
             data = [data]
 
-        created_pos = []
-        for po_data in data:
-            db_po = models.PurchaseOrder(
-                po_number=po_data.get('po_number'),
-                order_date=po_data.get('order_date'),
-                supplier_name=po_data.get('supplier_name'),
-                location=po_data.get('location', 'Mumbai')
-            )
-            db.add(db_po)
-            db.commit()
-            db.refresh(db_po)
+        created_pos = {} # Map PO Number to PO object to handle flat files
+        
+        for po_item_data in data:
+            # Smart mapping for Genesis ERP headers
+            po_no = (po_item_data.get('po_number') or 
+                     po_item_data.get('Document No.') or 
+                     po_item_data.get('Document No') or
+                     po_item_data.get('name'))
+            
+            if not po_no:
+                continue
 
-            items_data = po_data.get('items', [])
-            for item_data in items_data:
+            if po_no not in created_pos:
+                # Check if PO already exists in DB
+                db_po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.po_number == str(po_no)).first()
+                if not db_po:
+                    db_po = models.PurchaseOrder(
+                        po_number=str(po_no),
+                        order_date=po_item_data.get('order_date') or po_item_data.get('Date') or po_item_data.get('transaction_date'),
+                        supplier_name=po_item_data.get('supplier_name') or po_item_data.get('Supplier') or po_item_data.get('supplier'),
+                        location=po_item_data.get('location') or po_item_data.get('Ship To Name') or po_item_data.get('Location') or "Bihar"
+                    )
+                    db.add(db_po)
+                    db.commit()
+                    db.refresh(db_po)
+                created_pos[po_no] = db_po
+
+            db_po = created_pos[po_no]
+
+            # Add Item (handling both nested "items" list or flat rows)
+            items_to_process = po_item_data.get('items', [po_item_data])
+            if not isinstance(items_to_process, list):
+                items_to_process = [items_to_process]
+
+            for item_data in items_to_process:
+                # Skip if it's the main PO row but doesn't have item info
+                item_code = item_data.get('item_code') or item_data.get('Item Code')
+                if not item_code:
+                    continue
+
                 db_item = models.Item(
-                    item_code=item_data.get('item_code'),
-                    item_name=item_data.get('item_name'),
-                    hsn_code=item_data.get('hsn_code'),
-                    uom=item_data.get('uom'),
-                    quantity=int(item_data.get('quantity', 0)),
-                    rate=float(item_data.get('rate', 0)),
-                    weight_per_unit=float(item_data.get('weight_per_unit', 0)),
-                    cbm_per_unit=float(item_data.get('cbm_per_unit', 0)),
+                    item_code=str(item_code),
+                    item_name=item_data.get('item_name') or item_data.get('Item Name'),
+                    hsn_code=item_data.get('hsn_code') or item_data.get('HSN/SAC') or item_data.get('gst_hsn_code'),
+                    uom=item_data.get('uom') or item_data.get('UOM'),
+                    quantity=int(item_data.get('pending_qty') or item_data.get('Pending Qty') or item_data.get('quantity') or item_data.get('qty') or 0),
+                    rate=float(item_data.get('rate') or item_data.get('Rate') or 0),
+                    weight_per_unit=float(item_data.get('weight_per_unit') or item_data.get('Weight/Unit') or 0),
+                    cbm_per_unit=float(item_data.get('cbm_per_unit') or item_data.get('CBM/Unit') or 0),
                     po_id=db_po.id
                 )
                 db.add(db_item)
-            
-            db.commit()
-            db.refresh(db_po)
-            created_pos.append(db_po)
-
-        return {"message": f"Successfully uploaded {len(created_pos)} POs"}
+        
+        db.commit()
+        return {"message": f"Successfully processed Excel data for {len(created_pos)} Purchase Orders"}
     except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/optimize", response_model=List[schemas.ShipmentBase])

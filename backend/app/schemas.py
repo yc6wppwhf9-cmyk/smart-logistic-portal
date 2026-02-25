@@ -23,10 +23,10 @@ class Item(ItemBase):
         from_attributes = True
 
 class PurchaseOrderBase(BaseModel):
-    po_number: str
+    po_number: Optional[str] = "Unknown"
     order_date: Optional[date] = None
-    supplier_name: str
-    location: str
+    supplier_name: Optional[str] = "Unknown"
+    location: Optional[str] = "Unknown"
 
 class PurchaseOrderCreate(PurchaseOrderBase):
     items: List[ItemCreate]
