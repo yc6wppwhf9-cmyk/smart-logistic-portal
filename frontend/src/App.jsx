@@ -560,9 +560,18 @@ function App() {
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Total Volume</div>
                                             <div className="text-xl font-bold">{plan.total_cbm.toFixed(2)} <span className="text-xs font-normal text-slate-500 italic uppercase">CBM</span></div>
                                         </div>
-                                        <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                        <div className="bg-white/5 p-4 rounded-2xl border border-white/5 group-hover:border-brand-500/30 transition-all">
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Included POs</div>
-                                            <div className="text-xl font-bold">{plan.po_ids.length} <span className="text-xs font-normal text-slate-500 italic uppercase">Orders</span></div>
+                                            <div className="text-xl font-bold flex items-center gap-2">
+                                                {plan.po_ids.length}
+                                                <div className="text-[8px] flex flex-wrap gap-1">
+                                                    {plan.po_ids.map(id => (
+                                                        <span key={id} className="bg-brand-500/20 px-1 rounded text-brand-400">
+                                                            {pos.find(p => p.id === id)?.po_number.split('-').pop()}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Dispatch Date</div>
