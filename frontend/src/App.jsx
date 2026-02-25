@@ -147,7 +147,7 @@ function App() {
         setLoading(true);
         try {
             const res = await axios.post('/api/erpnext/sync');
-            alert("GENESIS SYNC: " + (res.data.message || "Done"));
+            alert("ORDER SYNC: " + (res.data.message || "Refresh Complete"));
             fetchData();
         } catch (err) {
             alert("Sync failed.");
@@ -260,7 +260,7 @@ function App() {
                                 <div className="flex gap-4">
                                     {userRole === 'admin' && (
                                         <button onClick={handleSyncERPNext} className="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold transition-all shadow-xl shadow-brand-500/20 active:scale-95">
-                                            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} /> Sync Genesis
+                                            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} /> Sync Pipeline
                                         </button>
                                     )}
                                 </div>
@@ -665,7 +665,7 @@ function App() {
                     </div>
                     <div className="flex gap-6 text-slate-400">
                         <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse" /> System Nodes Healthy</span>
-                        <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500" /> Genesis Sync Primary</span>
+                        <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500" /> Pipeline Sync Primary</span>
                     </div>
                 </div>
             </footer>

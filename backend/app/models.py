@@ -61,6 +61,7 @@ class Shipment(Base):
     total_cbm = Column(Float)
     location = Column(String(100), nullable=True)
     route = Column(String(255), nullable=True)
+    recommendation = Column(String(500), nullable=True)
     status = Column(String(50), default="Proposed") # Proposed, Dispatched
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
