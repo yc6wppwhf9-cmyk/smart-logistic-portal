@@ -27,16 +27,26 @@ class Item(Base):
 
     purchase_order = relationship("PurchaseOrder", back_populates="items")
 
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(50), unique=True, index=True)
+    role = Column(String(20)) # 'admin' or 'supplier'
+    supplier_name = Column(String(255), nullable=True) # If role is 'supplier'
+
 class PurchaseOrder(Base):
     __tablename__ = "purchase_orders"
 
     id = Column(Integer, primary_key=True, index=True)
     po_number = Column(String(100), unique=True, index=True)
     order_date = Column(Date)
+    expected_delivery_date = Column(Date, nullable=True)
+    date_change_count = Column(Integer, default=0)
     supplier_name = Column(String(255))
+    supplier_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     location = Column(String(100))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    status = Column(String(50), default="Pending") # Pending, Consolidated, Shipped
+    status = Column(String(50), default="Pending") # Pending, Shipped, Cancelled
     
     items = relationship("Item", back_populates="purchase_order", cascade="all, delete-orphan")
     shipments = relationship("Shipment", secondary=shipment_po_association, back_populates="purchase_orders")

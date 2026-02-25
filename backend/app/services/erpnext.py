@@ -36,26 +36,33 @@ class ERPNextService:
 
             synced_count = 0
             for po in pos_data:
-                # Check if PO already exists in our database
-                existing_po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.po_number == po['name']).first()
-                if existing_po:
-                    continue
-
                 # Fetch detailed items for this PO
                 items_endpoint = f"{self.url}/api/resource/Purchase Order/{po['name']}"
                 item_res = requests.get(items_endpoint, headers=self.headers)
                 item_res.raise_for_status()
                 po_detail = item_res.json().get("data", {})
 
-                # Create our local PO
-                db_po = models.PurchaseOrder(
-                    po_number=po_detail.get('name') or po_detail.get('document_no'),
-                    order_date=po_detail.get('transaction_date'),
-                    supplier_name=po_detail.get('supplier'),
-                    location=po_detail.get('ship_to_name') or "Bihar" # Map from Genesis "Ship To"
-                )
-                db.add(db_po)
-                db.flush() # Populate ID without committing transaction
+                # Check if PO already exists in our database
+                db_po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.po_number == po['name']).first()
+                
+                if db_po:
+                    # Update existing PO header
+                    db_po.order_date = po_detail.get('transaction_date')
+                    db_po.supplier_name = po_detail.get('supplier')
+                    db_po.location = po_detail.get('ship_to_name') or "Bihar"
+                    # Clear existing items to re-sync fresh ones
+                    db.query(models.Item).filter(models.Item.po_id == db_po.id).delete()
+                else:
+                    # Create our local PO
+                    db_po = models.PurchaseOrder(
+                        po_number=po_detail.get('name') or po_detail.get('document_no'),
+                        order_date=po_detail.get('transaction_date'),
+                        supplier_name=po_detail.get('supplier'),
+                        location=po_detail.get('ship_to_name') or "Bihar"
+                    )
+                    db.add(db_po)
+                
+                db.flush()
 
                 # Add Items
                 for item in po_detail.get('items', []):

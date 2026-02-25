@@ -25,6 +25,8 @@ class Item(ItemBase):
 class PurchaseOrderBase(BaseModel):
     po_number: Optional[str] = "Unknown"
     order_date: Optional[date] = None
+    expected_delivery_date: Optional[date] = None
+    date_change_count: int = 0
     supplier_name: Optional[str] = "Unknown"
     location: Optional[str] = "Unknown"
 

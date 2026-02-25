@@ -3,9 +3,28 @@ from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
 from .api.endpoints import router
 from . import models
+from .services.erpnext import erpnext_service
+from .database import SessionLocal
+from apscheduler.schedulers.background import BackgroundScheduler
 
 # Create tables
 Base.metadata.create_all(bind=engine)
+
+def auto_sync_job():
+    db = SessionLocal()
+    try:
+        print("Starting Background Auto-Sync...")
+        erpnext_service.fetch_purchase_orders(db)
+        print("Background Auto-Sync Completed.")
+    except Exception as e:
+        print(f"Background Sync Error: {e}")
+    finally:
+        db.close()
+
+# Start background scheduler
+scheduler = BackgroundScheduler()
+scheduler.add_job(auto_sync_job, 'interval', minutes=10)
+scheduler.start()
 
 app = FastAPI(title="Logistics AI Portal API")
 

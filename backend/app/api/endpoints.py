@@ -9,8 +9,13 @@ from .. import models, schemas
 from ..services.optimization import optimize_shipments
 from ..services.pdf_parser import extract_po_from_pdf
 from ..services.erpnext import erpnext_service
+from ..services.performance import get_supplier_performance
 
 router = APIRouter()
+
+@router.get("/suppliers/performance")
+def read_performance(db: Session = Depends(get_db)):
+    return get_supplier_performance(db)
 
 @router.post("/erpnext/sync")
 def sync_erpnext(db: Session = Depends(get_db)):
@@ -26,6 +31,26 @@ def delete_all_pos(db: Session = Depends(get_db)):
     db.query(models.PurchaseOrder).delete()
     db.commit()
     return {"message": "All Purchase Orders and items deleted successfully"}
+
+@router.patch("/purchase-orders/{po_id}/delivery-date")
+def update_delivery_date(po_id: int, payload: dict, db: Session = Depends(get_db)):
+    new_date = payload.get("expected_delivery_date")
+    db_po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.id == po_id).first()
+    
+    if not db_po:
+        raise HTTPException(status_code=404, detail="PO not found")
+    
+    # Check change count (Limit is 3)
+    if db_po.date_change_count >= 3:
+        db_po.status = "Cancelled"
+        db_po.date_change_count += 1
+        db.commit()
+        return {"message": "Change limit exceeded. PO has been automatically CANCELLED.", "status": "Cancelled"}
+    
+    db_po.expected_delivery_date = new_date
+    db_po.date_change_count += 1
+    db.commit()
+    return {"message": f"Date updated. Change count: {db_po.date_change_count}/3", "new_count": db_po.date_change_count}
 
 @router.post("/purchase-orders", response_model=schemas.PurchaseOrder)
 def create_po(po: schemas.PurchaseOrderCreate, db: Session = Depends(get_db)):

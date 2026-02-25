@@ -19,8 +19,12 @@ def calculate_totals(pos: List[PurchaseOrder]) -> Dict[str, float]:
     total_cbm = 0.0
     for po in pos:
         for item in po.items:
-            total_weight += item.weight_per_unit * item.quantity
-            total_cbm += item.cbm_per_unit * item.quantity
+            # Fallback: If weight or cbm is 0, use a reasonable default for logistics planning
+            w = item.weight_per_unit if item.weight_per_unit > 0 else 2.0  # Default 2kg
+            c = item.cbm_per_unit if item.cbm_per_unit > 0 else 0.01     # Default 0.01 CBM
+            
+            total_weight += w * item.quantity
+            total_cbm += c * item.quantity
     return {"weight": total_weight, "cbm": total_cbm}
 
 def suggest_vehicle(weight: float) -> str:

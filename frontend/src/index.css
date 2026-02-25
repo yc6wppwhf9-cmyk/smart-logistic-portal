@@ -31,6 +31,48 @@
     }
 }
 
+/* Status Signal Lights */
+.status-signal {
+    @apply w-3 h-3 rounded-full relative;
+}
+
+.status-signal::after {
+    content: '';
+    @apply absolute inset-0 rounded-full animate-ping opacity-75;
+}
+
+.status-signal-green {
+    @apply bg-emerald-500;
+}
+
+.status-signal-green::after {
+    @apply bg-emerald-500;
+}
+
+.status-signal-yellow {
+    @apply bg-amber-500;
+}
+
+.status-signal-yellow::after {
+    @apply bg-amber-500;
+}
+
+.status-signal-red {
+    @apply bg-red-500;
+}
+
+.status-signal-red::after {
+    @apply bg-red-500;
+}
+
+.status-signal-blue {
+    @apply bg-blue-500;
+}
+
+.status-signal-blue::after {
+    @apply bg-blue-500;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
