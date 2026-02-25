@@ -109,8 +109,19 @@ class ERPNextService:
         try:
             # 1. Try to update the custom field
             response = requests.put(endpoint, headers=self.headers, json=payload)
+            if response.status_code != 200:
+                 print(f"ERPNext Field Update Note: {response.text}")
             
-            # 2. Also add a comment regardless for the history timeline
+            # 2. Add a Tag to the PO (Very visible in List View)
+            tag_endpoint = f"{self.url}/api/method/frappe.desk.tags.add_tag"
+            tag_payload = {
+                "dt": "Purchase Order",
+                "dn": po_number,
+                "tag": f"Portal-{status.replace(' ', '-')}"
+            }
+            requests.post(tag_endpoint, headers=self.headers, json=tag_payload)
+
+            # 3. Add a comment for the history timeline
             comment_endpoint = f"{self.url}/api/method/frappe.desk.form.utils.add_comment"
             comment_payload = {
                 "reference_doctype": "Purchase Order",
@@ -123,6 +134,7 @@ class ERPNextService:
             
             return {"message": f"Successfully updated ERPNext for {po_number}"}
         except Exception as e:
+            print(f"ERPNext Sync Error: {e}")
             return {"error": str(e)}
 
 erpnext_service = ERPNextService()
