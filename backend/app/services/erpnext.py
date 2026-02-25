@@ -30,7 +30,7 @@ class ERPNextService:
         }
 
         try:
-            response = requests.get(endpoint, headers=self.headers, params=params)
+            response = requests.get(endpoint, headers=self.headers, params=params, timeout=10)
             response.raise_for_status()
             pos_data = response.json().get("data", [])
 
@@ -38,7 +38,7 @@ class ERPNextService:
             for po in pos_data:
                 # Fetch detailed items for this PO
                 items_endpoint = f"{self.url}/api/resource/Purchase Order/{po['name']}"
-                item_res = requests.get(items_endpoint, headers=self.headers)
+                item_res = requests.get(items_endpoint, headers=self.headers, timeout=10)
                 item_res.raise_for_status()
                 po_detail = item_res.json().get("data", {})
 
@@ -108,7 +108,7 @@ class ERPNextService:
         
         try:
             # 1. Try to update the custom field
-            response = requests.put(endpoint, headers=self.headers, json=payload)
+            response = requests.put(endpoint, headers=self.headers, json=payload, timeout=5)
             if response.status_code != 200:
                  print(f"ERPNext Field Update Note: {response.text}")
             
@@ -119,7 +119,7 @@ class ERPNextService:
                 "dn": po_number,
                 "tag": f"Portal-{status.replace(' ', '-')}"
             }
-            requests.post(tag_endpoint, headers=self.headers, json=tag_payload)
+            requests.post(tag_endpoint, headers=self.headers, json=tag_payload, timeout=5)
 
             # 3. Add a comment for the history timeline
             comment_endpoint = f"{self.url}/api/method/frappe.desk.form.utils.add_comment"
@@ -130,7 +130,7 @@ class ERPNextService:
                 "comment_email": "sync-service@hscvpl.com",
                 "comment_by": "HSCVPL Sync"
             }
-            requests.post(comment_endpoint, headers=self.headers, json=comment_payload)
+            requests.post(comment_endpoint, headers=self.headers, json=comment_payload, timeout=5)
             
             return {"message": f"Successfully updated ERPNext for {po_number}"}
         except Exception as e:
