@@ -67,7 +67,10 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
             recommendation = f"High load for {loc}. Priority dispatch recommended."
         
         # Suggest route based on location
-        route = f"{loc.upper()} → BIHAR FACTORY"
+        if loc.upper() == "BIHAR":
+            route = "LOCAL BIHAR → BIHAR FACTORY"
+        else:
+            route = f"{loc.upper()} → BIHAR FACTORY"
         
         plan = {
             "dispatch_date": primary_date,

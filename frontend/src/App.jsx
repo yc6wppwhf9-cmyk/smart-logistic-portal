@@ -392,9 +392,14 @@ function App() {
                                         />
                                     </div>
                                     {userRole === 'admin' && (
-                                        <button className="bg-white/5 hover:bg-white/10 p-2 rounded-lg border border-white/10" title="Filter View">
-                                            <Filter size={18} />
-                                        </button>
+                                        <div className="flex gap-2">
+                                            <button className="bg-white/5 hover:bg-white/10 p-2 rounded-lg border border-white/10" title="Filter View">
+                                                <Filter size={18} />
+                                            </button>
+                                            <button onClick={handleDeleteAll} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-lg border border-red-500/10 transition-colors" title="Format Database">
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
                             </div>
