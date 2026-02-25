@@ -307,8 +307,11 @@ function App() {
                                                                     <td className="py-3 font-bold">{item.item_name}</td>
                                                                     <td className="py-3 text-center font-mono">{item.quantity} {item.uom}</td>
                                                                     <td className="py-3 text-right">
-                                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${grade === 'A' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-500 animate-pulse'}`}>
-                                                                            {grade === 'A' ? 'SECURE' : 'CRITICAL'}
+                                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${po?.status === 'Dispatched' ? 'bg-emerald-500/10 text-emerald-400' :
+                                                                            po?.status === 'Pending' ? 'bg-amber-500/10 text-amber-500' :
+                                                                                'bg-brand-500/10 text-brand-400'
+                                                                            }`}>
+                                                                            {po?.status || 'PENDING'}
                                                                         </span>
                                                                     </td>
                                                                 </tr>
@@ -353,21 +356,29 @@ function App() {
                                         <div className="space-y-6">
                                             <div>
                                                 <div className="flex justify-between text-xs mb-2">
-                                                    <span className="text-slate-400 font-bold uppercase">Pending Load</span>
-                                                    <span className="text-white font-bold">{pos.reduce((acc, p) => acc + (p.status === 'Pending' ? 1 : 0), 0)} Orders</span>
+                                                    <span className="text-slate-400 font-bold uppercase">Ready to Dispatch</span>
+                                                    <span className="text-white font-bold">{pos.filter(p => ['Packed', 'Loaded', 'Dispatched'].includes(p.status)).length} / {pos.filter(p => p.status !== 'Cancelled').length} Orders</span>
                                                 </div>
                                                 <div className="h-2 bg-black/40 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-brand-500 w-[65%]" />
+                                                    <div
+                                                        className="h-full bg-brand-500 transition-all duration-1000"
+                                                        style={{ width: `${(pos.filter(p => ['Packed', 'Loaded', 'Dispatched'].includes(p.status)).length / (pos.filter(p => p.status !== 'Cancelled').length || 1)) * 100}%` }}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                                                    <div className="text-2xl font-bold text-emerald-400 whitespace-nowrap">{(pos.filter(p => p.status === 'Pending').length * 280).toLocaleString()} <span className="text-[10px]">%</span></div>
-                                                    <div className="text-[10px] text-slate-500 font-bold uppercase">Ready</div>
+                                                    <div className="text-2xl font-bold text-emerald-400 whitespace-nowrap">
+                                                        {Math.round((pos.filter(p => ['Packed', 'Loaded', 'Dispatched'].includes(p.status)).length / (pos.filter(p => p.status !== 'Cancelled').length || 1)) * 100)}
+                                                        <span className="text-[10px] ml-1">%</span>
+                                                    </div>
+                                                    <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Ready</div>
                                                 </div>
                                                 <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                                                    <div className="text-2xl font-bold text-red-400 whitespace-nowrap">{pos.filter(p => p.status === 'Cancelled').length}</div>
-                                                    <div className="text-[10px] text-slate-500 font-bold uppercase">Alerts</div>
+                                                    <div className="text-2xl font-bold text-red-400 whitespace-nowrap">
+                                                        {pos.filter(p => p.status === 'Cancelled').length}
+                                                    </div>
+                                                    <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Alerts</div>
                                                 </div>
                                             </div>
                                         </div>
