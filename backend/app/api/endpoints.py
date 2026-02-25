@@ -48,11 +48,11 @@ def update_po_status(po_id: int, payload: dict, db: Session = Depends(get_db)):
     db_po.status = new_status
     db.commit()
     
-    # Push update back to ERPNext
-    try:
-        erpnext_service.update_purchase_order_status(db_po.po_number, new_status)
-    except:
-        pass # Don't block core flow if ERP update fails
+    # Push update back to ERPNext (Temporarily disabled as per user's "dont push" request)
+    # try:
+    #     erpnext_service.update_purchase_order_status(db_po.po_number, new_status)
+    # except:
+    #     pass 
         
     return {"message": f"PO status updated to {new_status} and synced to ERPNext", "status": new_status}
 
