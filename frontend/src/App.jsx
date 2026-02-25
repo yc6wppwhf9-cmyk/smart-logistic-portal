@@ -147,7 +147,7 @@ function App() {
         setLoading(true);
         try {
             const res = await axios.post('/api/erpnext/sync');
-            alert(res.data.message || res.data.error);
+            alert("GENESIS SYNC: " + (res.data.message || "Done"));
             fetchData();
         } catch (err) {
             alert("Sync failed.");
@@ -188,8 +188,8 @@ function App() {
                     <div className="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <Truck className="text-white" size={32} />
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-2 underline decoration-brand-500 underline-offset-4">HSCVPL PORTAL</h1>
-                    <p className="text-slate-400 mb-8 text-xs font-bold uppercase tracking-widest">Enterprise Logistics Intelligence</p>
+                    <h1 className="text-2xl font-bold text-white mb-2 underline decoration-brand-500 underline-offset-4 tracking-tighter">HSCVPL LOGISTICS</h1>
+                    <p className="text-slate-400 mb-8 text-[10px] font-bold uppercase tracking-[0.2em]">Supply Chain Intelligence Platform</p>
                     <div className="space-y-4">
                         <button onClick={() => handleLogin('admin')} className="w-full btn-primary flex items-center justify-center gap-2 py-3">
                             <Shield size={20} /> Continue as Company Admin
@@ -259,8 +259,8 @@ function App() {
                                 </div>
                                 <div className="flex gap-4">
                                     {userRole === 'admin' && (
-                                        <button onClick={handleSyncERPNext} className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-emerald-500/20">
-                                            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} /> Sync ERP
+                                        <button onClick={handleSyncERPNext} className="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold transition-all shadow-xl shadow-brand-500/20 active:scale-95">
+                                            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} /> Sync Genesis
                                         </button>
                                     )}
                                 </div>
@@ -291,8 +291,8 @@ function App() {
                                     )}
 
                                     {userRole === 'admin' && (
-                                        <div className="glass-card p-6">
-                                            <h2 className="text-lg font-bold mb-6 flex items-center gap-2 uppercase tracking-tight text-white"><Box className="text-brand-400" size={20} /> RM HEALTH STATUS</h2>
+                                        <div className="glass-card p-6 border-b-4 border-brand-500/20">
+                                            <h2 className="text-lg font-bold mb-6 flex items-center gap-2 uppercase tracking-tight text-white"><Box className="text-brand-400" size={20} /> SUPPLY PIPELINE MONITOR</h2>
                                             <div className="overflow-x-auto">
                                                 <table className="w-full text-xs">
                                                     <thead>
@@ -389,13 +389,13 @@ function App() {
                                     </div>
 
                                     {userRole === 'admin' && (
-                                        <div className="glass-card p-6 border-l-4 border-amber-500">
+                                        <div className="glass-card p-6 border-l-4 border-brand-500 bg-brand-500/5">
                                             <div className="flex gap-4 items-center mb-4">
-                                                <AlertTriangle className="text-amber-500" size={24} />
-                                                <h3 className="font-bold">AI Suggestion</h3>
+                                                <Info className="text-brand-400" size={24} />
+                                                <h3 className="font-bold uppercase tracking-tight text-sm">Strategic Insight</h3>
                                             </div>
                                             <p className="text-xs text-slate-400 leading-relaxed">
-                                                Based on reliability data, <span className="text-white font-bold">Abc Raw Material</span> is the highest rated supplier for Mumbai. We recommend routing current excess capacity through them.
+                                                Performance analytics indicate <span className="text-white font-bold">Abc Raw Material</span> as the optimal logistics partner for current Mumbai transit lanes.
                                             </p>
                                         </div>
                                     )}
@@ -407,7 +407,7 @@ function App() {
                     {activeTab === 'orders' && (
                         <motion.div key="orders" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="space-y-6">
                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                <h1 className="text-2xl font-bold">Inbound Purchase Orders</h1>
+                                <h1 className="text-2xl font-bold tracking-tighter uppercase">Inbound Logistics Pipeline</h1>
                                 <div className="flex gap-4 w-full sm:w-auto">
                                     <div className="relative flex-grow sm:w-64">
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
@@ -583,17 +583,17 @@ function App() {
                                         </div>
                                     </div>
 
-                                    <div className="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/20 flex flex-col md:flex-row justify-between items-center gap-4">
+                                    <div className="p-4 bg-brand-500/5 rounded-2xl border border-brand-500/10 flex flex-col md:flex-row justify-between items-center gap-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><CheckCircle size={18} /></div>
-                                            <span className="font-bold text-slate-200 text-sm">AI PLAN: {plan.recommendation}</span>
+                                            <div className="w-8 h-8 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400"><CheckCircle size={18} /></div>
+                                            <span className="font-bold text-slate-200 text-sm tracking-tight capitalize">Optimized Route: {plan.recommendation.replace('AI PLAN: ', '')}</span>
                                         </div>
                                         <button
                                             onClick={() => handleCreateShipment(plan)}
                                             disabled={loading}
-                                            className={`bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-emerald-500/30 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                            className={`bg-brand-600 hover:bg-brand-500 text-white px-10 py-3.5 rounded-xl flex items-center gap-2 font-black tracking-tighter transition-all shadow-2xl shadow-brand-500/40 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-0.5 active:translate-y-0'}`}
                                         >
-                                            {loading ? <RefreshCw className="animate-spin" size={18} /> : 'DISPATCH TO BIHAR FACTORY'}
+                                            {loading ? <RefreshCw className="animate-spin" size={18} /> : `DISPATCH ${plan.location ? plan.location.toUpperCase() : 'LINE'} TO FACTORY`}
                                             <ArrowRight size={18} />
                                         </button>
                                     </div>
@@ -663,9 +663,9 @@ function App() {
                         <Truck size={12} className="text-brand-500" />
                         HSCVPL Supply Chain Intelligence © 2026
                     </div>
-                    <div className="flex gap-6">
-                        <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> AI Engine Online</span>
-                        <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Genesis ERP Sync Active</span>
+                    <div className="flex gap-6 text-slate-400">
+                        <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse" /> System Nodes Healthy</span>
+                        <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500" /> Genesis Sync Primary</span>
                     </div>
                 </div>
             </footer>

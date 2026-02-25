@@ -60,11 +60,11 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
         days_to_dispatch = (primary_date - today).days
         vehicle = suggest_vehicle(total_weight)
         
-        recommendation = f"Optimized for {loc} region."
+        recommendation = f"Optimized for {loc} logistics lane."
         if total_weight < 500 and days_to_dispatch > 1:
-            recommendation = f"Low load for {loc}. Wait for more orders to reduce freight cost."
+            recommendation = f"Low load for {loc}. Consolidating more orders to reduce freight cost per unit."
         elif total_weight > 5000:
-            recommendation = f"High load for {loc}. Priority dispatch recommended."
+            recommendation = f"Strategic volume for {loc}. Priority transit recommended."
         
         # Suggest route based on location
         if loc.upper() == "BIHAR":

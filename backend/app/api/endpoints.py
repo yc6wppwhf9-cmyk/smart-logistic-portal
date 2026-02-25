@@ -49,13 +49,13 @@ def update_po_status(po_id: int, payload: dict, db: Session = Depends(get_db)):
     db_po.status = new_status
     db.commit()
     
-    # Push update back to ERPNext
+    # Push update back to Genesis
     try:
         erpnext_service.update_purchase_order_status(db_po.po_number, new_status)
     except:
-        pass # Don't block core flow if ERP update fails
+        pass # Don't block core flow if Genesis update fails
         
-    return {"message": f"PO status updated to {new_status} and synced to ERPNext", "status": new_status}
+    return {"message": f"PO status updated to {new_status} and synced to Genesis", "status": new_status}
 
 @router.patch("/purchase-orders/{po_id}/delivery-date")
 def update_delivery_date(po_id: int, payload: dict, db: Session = Depends(get_db)):
@@ -218,11 +218,11 @@ def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_
         po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.id == po_id).first()
         if po:
             po.status = "Consolidated"
-            # Push update back to ERPNext
+            # Push update back to Genesis
             try:
                 erpnext_service.update_purchase_order_status(po.po_number, "Consolidated")
             except Exception as e:
-                print(f"Failed to sync PO {po.po_number} to ERP: {e}")
+                print(f"Failed to sync PO {po.po_number} to Genesis: {e}")
             
             # Add to association table
             db_shipment.purchase_orders.append(po)
