@@ -117,6 +117,19 @@ function App() {
         localStorage.removeItem('userRole');
     };
 
+    const handleUpdateStatus = async (poId, status) => {
+        try {
+            setLoading(true);
+            const res = await axios.patch(`/api/purchase-orders/${poId}/status`, { status });
+            alert(res.data.message);
+            fetchData();
+        } catch (err) {
+            alert("Status update failed: " + (err.response?.data?.detail || err.message));
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleUpdateDeliveryDate = async (poId, date) => {
         try {
             setLoading(true);
@@ -461,7 +474,23 @@ function App() {
                                                         {p.status === 'Cancelled' ? (
                                                             <span className="text-[10px] bg-red-500/20 text-red-400 px-3 py-1 rounded-full font-bold shadow-sm border border-red-500/10">AUTO-CANCELLED</span>
                                                         ) : (
-                                                            <span className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase border ${p.status === 'Pending' ? 'bg-amber-500/10 text-amber-500 border-amber-500/10' : 'bg-brand-500/10 text-brand-400 border-brand-500/10'}`}>{p.status}</span>
+                                                            userRole === 'supplier' && p.status !== 'Consolidated' ? (
+                                                                <select
+                                                                    className="bg-brand-500/10 border border-brand-500/20 rounded-lg px-2 py-1 text-[10px] font-bold uppercase focus:ring-2 focus:ring-brand-500 focus:outline-none text-brand-400 cursor-pointer"
+                                                                    value={p.status}
+                                                                    onChange={(e) => handleUpdateStatus(p.id, e.target.value)}
+                                                                >
+                                                                    <option value="Pending">Pending</option>
+                                                                    <option value="Confirmed">Confirmed</option>
+                                                                    <option value="In Production">In Production</option>
+                                                                    <option value="Packed">Packed</option>
+                                                                    <option value="Loaded">Loaded</option>
+                                                                    <option value="Dispatched">Dispatched</option>
+                                                                    <option value="Cancelled">Cancel Order</option>
+                                                                </select>
+                                                            ) : (
+                                                                <span className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase border ${p.status === 'Pending' ? 'bg-amber-500/10 text-amber-500 border-amber-500/10' : 'bg-brand-500/10 text-brand-400 border-brand-500/10'}`}>{p.status}</span>
+                                                            )
                                                         )}
                                                     </td>
                                                 </tr>

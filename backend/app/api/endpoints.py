@@ -32,6 +32,23 @@ def delete_all_pos(db: Session = Depends(get_db)):
     db.commit()
     return {"message": "All Purchase Orders and items deleted successfully"}
 
+@router.patch("/purchase-orders/{po_id}/status")
+def update_po_status(po_id: int, payload: dict, db: Session = Depends(get_db)):
+    # Allowed statuses based on user request
+    allowed_statuses = ["Pending", "Confirmed", "In Production", "Packed", "Loaded", "Dispatched", "Cancelled"]
+    new_status = payload.get("status")
+    
+    if new_status not in allowed_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {', '.join(allowed_statuses)}")
+    
+    db_po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.id == po_id).first()
+    if not db_po:
+        raise HTTPException(status_code=404, detail="PO not found")
+        
+    db_po.status = new_status
+    db.commit()
+    return {"message": f"PO status updated to {new_status}", "status": new_status}
+
 @router.patch("/purchase-orders/{po_id}/delivery-date")
 def update_delivery_date(po_id: int, payload: dict, db: Session = Depends(get_db)):
     new_date = payload.get("expected_delivery_date")
