@@ -165,8 +165,8 @@ function App() {
                     <div className="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <Truck className="text-white" size={32} />
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-2">Logistics AI Portal</h1>
-                    <p className="text-slate-400 mb-8">Select your access level to continue</p>
+                    <h1 className="text-2xl font-bold text-white mb-2 underline decoration-brand-500 underline-offset-4">HSCVPL PORTAL</h1>
+                    <p className="text-slate-400 mb-8 text-xs font-bold uppercase tracking-widest">Enterprise Logistics Intelligence</p>
                     <div className="space-y-4">
                         <button onClick={() => handleLogin('admin')} className="w-full btn-primary flex items-center justify-center gap-2 py-3">
                             <Shield size={20} /> Continue as Company Admin
@@ -211,13 +211,13 @@ function App() {
                             <div className="bg-brand-600 p-1.5 rounded-lg">
                                 <Truck className="text-white" size={20} />
                             </div>
-                            <span className="text-lg font-bold tracking-tight text-white hidden sm:block">Logistics <span className="text-brand-500">AI</span></span>
+                            <span className="text-lg font-bold tracking-tight text-white hidden sm:block">HSCVPL <span className="text-brand-500">LOGISTICS</span></span>
                         </div>
                         <div className="flex items-center space-x-2 sm:space-x-4">
-                            <button onClick={() => setActiveTab('dashboard')} className={`nav-link flex items-center gap-2 ${activeTab === 'dashboard' && 'bg-white/5 text-white'}`}><LayoutDashboard size={18} /> <span className="hidden md:block">Dashboard</span></button>
-                            <button onClick={() => setActiveTab('orders')} className={`nav-link flex items-center gap-2 ${activeTab === 'orders' && 'bg-white/5 text-white'}`}><Package size={18} /> <span className="hidden md:block">Orders</span></button>
-                            {userRole === 'admin' && <button onClick={() => setActiveTab('shipments')} className={`nav-link flex items-center gap-2 ${activeTab === 'shipments' && 'bg-white/5 text-white'}`}><History size={18} /> <span className="hidden md:block">Consolidation</span></button>}
-                            <button onClick={() => setActiveTab('settings')} className={`nav-link flex items-center gap-2 ${activeTab === 'settings' && 'bg-white/5 text-white'}`}><Settings size={18} /> <span className="hidden md:block">Settings</span></button>
+                            <button onClick={() => setActiveTab('dashboard')} className={`nav-link flex items-center gap-2 ${activeTab === 'dashboard' && 'bg-white/5 text-white'}`}><LayoutDashboard size={18} /> <span className="hidden md:block">DASHBOARD</span></button>
+                            <button onClick={() => setActiveTab('orders')} className={`nav-link flex items-center gap-2 ${activeTab === 'orders' && 'bg-white/5 text-white'}`}><Package size={18} /> <span className="hidden md:block">ORDERS</span></button>
+                            {userRole === 'admin' && <button onClick={() => setActiveTab('shipments')} className={`nav-link flex items-center gap-2 ${activeTab === 'shipments' && 'bg-white/5 text-white'}`}><History size={18} /> <span className="hidden md:block">CONSOLIDATION</span></button>}
+                            <button onClick={() => setActiveTab('settings')} className={`nav-link flex items-center gap-2 ${activeTab === 'settings' && 'bg-white/5 text-white'}`}><Settings size={18} /> <span className="hidden md:block">SETTINGS</span></button>
                             <button onClick={handleLogout} className="p-2 text-slate-400 hover:text-red-400 transition-colors" title="Logout"><LogOut size={20} /></button>
                         </div>
                     </div>
@@ -231,8 +231,8 @@ function App() {
                             {/* Summary Header */}
                             <div className="flex flex-col md:flex-row justify-between gap-6">
                                 <div>
-                                    <h1 className="text-2xl font-bold">Welcome, {userRole === 'admin' ? 'Administrator' : currentSupplierName}</h1>
-                                    <p className="text-slate-400">Precision logistics monitoring for Bihar Factory supply chain</p>
+                                    <h1 className="text-2xl font-bold">WELCOME TO HSCVPL, {userRole === 'admin' ? 'ADMINISTRATOR' : currentSupplierName.toUpperCase()}</h1>
+                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Precision logistics monitoring for Bihar Factory supply chain</p>
                                 </div>
                                 <div className="flex gap-4">
                                     {userRole === 'admin' && (
@@ -429,8 +429,8 @@ function App() {
                         <motion.div key="shipments" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <h1 className="text-2xl font-bold">AI Consolidation Logic</h1>
-                                    <p className="text-slate-400 text-sm">Grouping Mumbai POs into high-utilization vehicle loads</p>
+                                    <h1 className="text-2xl font-bold uppercase">HSCVPL CONSOLIDATION ENGINE</h1>
+                                    <p className="text-slate-400 text-sm">Automated grouping of regional POs into high-utilization vehicle loads</p>
                                 </div>
                                 <div className="bg-brand-500/10 px-4 py-2 rounded-xl text-brand-400 font-bold border border-brand-500/20 flex items-center gap-2">
                                     <TrendingDown size={18} /> Cost Efficiency: +24%
@@ -446,8 +446,9 @@ function App() {
                                         <div className="flex items-center gap-6">
                                             <div className="w-16 h-16 bg-brand-500/10 rounded-2xl flex items-center justify-center text-brand-400 shadow-inner"><Calendar size={32} /></div>
                                             <div>
-                                                <div className="text-xs font-bold uppercase text-slate-500 tracking-widest mb-1">Target Dispatch</div>
-                                                <div className="text-xl font-bold">{new Date(plan.dispatch_date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+                                                <div className="text-xs font-bold uppercase text-slate-500 tracking-widest mb-1">Route Suggestion</div>
+                                                <div className="text-xl font-bold text-brand-400">{plan.route || 'TRANSIT → BIHAR'}</div>
+                                                <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">REGION: {plan.location || 'Unknown'}</div>
                                             </div>
                                         </div>
                                         <div className="flex gap-12">
@@ -507,7 +508,7 @@ function App() {
                                             </div>
                                             <button onClick={handleLogout} className="text-xs bg-red-500/10 text-red-500 px-3 py-1.5 rounded-lg border border-red-500/20 font-bold hover:bg-red-500/20 transition-all">Sign Out</button>
                                         </div>
-                                        <p className="text-[10px] text-slate-500 italic uppercase font-bold tracking-widest">System generated Token: 8xa-0291-xc2</p>
+                                        <p className="text-[10px] text-slate-500 italic uppercase font-bold tracking-widest">SECURED BY HSCVPL ENTERPRISE</p>
                                     </div>
                                 </div>
 
@@ -534,7 +535,7 @@ function App() {
                 <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest font-bold text-slate-500">
                     <div className="flex items-center gap-2">
                         <Truck size={12} className="text-brand-500" />
-                        Supply Chain Intelligence Console © 2026
+                        HSCVPL Supply Chain Intelligence © 2026
                     </div>
                     <div className="flex gap-6">
                         <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> AI Engine Online</span>

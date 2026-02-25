@@ -39,38 +39,47 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
     if not pending_pos:
         return []
 
-    totals = calculate_totals(pending_pos)
-    total_weight = totals["weight"]
-    total_cbm = totals["cbm"]
+    # Group POs by location (State/City)
+    grouped_pos = {}
+    for po in pending_pos:
+        loc = po.location or "Unknown Region"
+        if loc not in grouped_pos:
+            grouped_pos[loc] = []
+        grouped_pos[loc].append(po)
 
+    all_plans = []
     today = date.today()
     dispatch_dates = get_next_dispatch_dates(today)
-    
-    # Simple logic: group all Mumbai -> Bihar together for now
-    # In a real world, we might split if > Truck capacity, but here we assume 1 or more vehicles
-    
-    primary_date = dispatch_dates[0]
-    days_to_dispatch = (primary_date - today).days
-    
-    vehicle = suggest_vehicle(total_weight)
-    
-    recommendation = "Dispatch now"
-    if total_weight < 500 and days_to_dispatch > 1:
-        recommendation = "Wait to consolidate more POs to optimize cost"
-    elif days_to_dispatch > 2:
-        recommendation = "Wait for next cycle (Tuesday/Friday)"
+    primary_date = dispatch_dates[0] if dispatch_dates else today
 
-    # Basic grouping: all pending into one suggested shipment for this MVP
-    # This can be enhanced for overflow later.
-    
-    suggested_shipment = {
-        "dispatch_date": primary_date,
-        "vehicle_type": vehicle,
-        "total_weight": total_weight,
-        "total_cbm": total_cbm,
-        "recommendation": recommendation,
-        "po_ids": [po.id for po in pending_pos],
-        "status": "Proposed"
-    }
+    for loc, pos in grouped_pos.items():
+        totals = calculate_totals(pos)
+        total_weight = totals["weight"]
+        total_cbm = totals["cbm"]
+        
+        days_to_dispatch = (primary_date - today).days
+        vehicle = suggest_vehicle(total_weight)
+        
+        recommendation = f"Optimized for {loc} region."
+        if total_weight < 500 and days_to_dispatch > 1:
+            recommendation = f"Low load for {loc}. Wait for more orders to reduce freight cost."
+        elif total_weight > 5000:
+            recommendation = f"High load for {loc}. Priority dispatch recommended."
+        
+        # Suggest route based on location
+        route = f"{loc.upper()} → BIHAR FACTORY"
+        
+        plan = {
+            "dispatch_date": primary_date,
+            "vehicle_type": vehicle,
+            "total_weight": total_weight,
+            "total_cbm": total_cbm,
+            "recommendation": recommendation,
+            "location": loc,
+            "route": route,
+            "po_ids": [po.id for po in pos],
+            "status": "Proposed"
+        }
+        all_plans.append(plan)
 
-    return [suggested_shipment]
+    return all_plans
