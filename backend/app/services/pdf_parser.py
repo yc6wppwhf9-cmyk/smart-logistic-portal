@@ -89,11 +89,25 @@ def extract_po_from_pdf(file_path_or_stream) -> List[Dict[str, Any]]:
                         "cbm_per_unit": 0.0
                     })
 
+            # Extract Supplier Location/State
+            # Look for State: XYZ or Address: ... (State Name)
+            state_match = re.search(r'State\s*:\s*([\w\s]+)', text, re.IGNORECASE)
+            address_match = re.search(r'Vendor Address\s*:\s*(.*)', text, re.IGNORECASE)
+            
+            location = "Mumbai" # Default
+            if state_match:
+                location = state_match.group(1).strip()
+            elif address_match:
+                # Try to get the last part of address which is usually the state/city
+                addr_parts = [p.strip() for p in address_match.group(1).split(',')]
+                if len(addr_parts) > 1:
+                    location = addr_parts[-1] # Usually State or City
+
             pos.append({
                 "po_number": po_number,
                 "order_date": order_date,
                 "supplier_name": vendor_name,
-                "location": "Mumbai", # Based on your requirement
+                "location": location,
                 "items": items
             })
             

@@ -119,7 +119,7 @@ async def upload_purchase_orders(file: UploadFile = File(...), db: Session = Dep
                         po_number=str(po_no),
                         order_date=po_item_data.get('order_date') or po_item_data.get('Date') or po_item_data.get('transaction_date'),
                         supplier_name=po_item_data.get('supplier_name') or po_item_data.get('Supplier') or po_item_data.get('supplier'),
-                        location=po_item_data.get('location') or po_item_data.get('Ship To Name') or po_item_data.get('Location') or "Bihar"
+                        location=po_item_data.get('state') or po_item_data.get('State') or po_item_data.get('Supplier State') or po_item_data.get('location') or po_item_data.get('Location') or "Bihar"
                     )
                     db.add(db_po)
                     db.commit()
