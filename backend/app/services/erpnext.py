@@ -89,7 +89,7 @@ class ERPNextService:
                 db.commit()
                 synced_count += 1
 
-            return {"message": f"Successfully synced {synced_count} new Purchase Orders from ERPNext"}
+            return {"message": f"Successfully synced {synced_count} new Purchase Orders"}
 
         except Exception as e:
             return {"error": str(e)}
@@ -126,9 +126,9 @@ class ERPNextService:
             comment_payload = {
                 "reference_doctype": "Purchase Order",
                 "reference_name": po_number,
-                "content": f"<b>Genesis Sync:</b> Supply status changed to <b>{status}</b>",
-                "comment_email": "genesis-sync@hscvpl.com",
-                "comment_by": "HSCVPL Genesis Sync"
+                "content": f"<b>Sync Trace:</b> Supply status changed to <b>{status}</b>",
+                "comment_email": "sync-service@hscvpl.com",
+                "comment_by": "HSCVPL Sync"
             }
             requests.post(comment_endpoint, headers=self.headers, json=comment_payload)
             

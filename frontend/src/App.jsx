@@ -157,7 +157,7 @@ function App() {
     };
 
     const handleDeleteAll = async () => {
-        if (!window.confirm("Format Portal Database? (ERPNext remains safe)")) return;
+        if (!window.confirm("Format Portal Database? (Source data remains safe)")) return;
         setLoading(true);
         try {
             await axios.delete('/api/purchase-orders');
@@ -175,7 +175,7 @@ function App() {
             alert("✅ SHIPMENT DISPATCHED: All POs consolidated and synced to ERP.");
         } catch (err) {
             console.error(err);
-            alert("❌ Sync Error: Could not reach ERP or Database. Please check connection.");
+            alert("❌ Sync Error: Could not reach source or database. Please check connection.");
         } finally {
             setLoading(false);
         }
@@ -260,7 +260,7 @@ function App() {
                                 <div className="flex gap-4">
                                     {userRole === 'admin' && (
                                         <button onClick={handleSyncERPNext} className="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold transition-all shadow-xl shadow-brand-500/20 active:scale-95">
-                                            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} /> Sync Pipeline
+                                            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} /> Sync
                                         </button>
                                     )}
                                 </div>
@@ -599,7 +599,7 @@ function App() {
                                     </div>
                                 </div>
                             ))}
-                            {plans.length === 0 && <div className="glass-card py-24 text-center text-slate-500 italic">No consolidated shipments available yet. Sync from ERP to begin.</div>}
+                            {plans.length === 0 && <div className="glass-card py-24 text-center text-slate-500 italic">No consolidated shipments available yet. Sync to begin.</div>}
                         </motion.div>
                     )}
 
@@ -665,7 +665,7 @@ function App() {
                     </div>
                     <div className="flex gap-6 text-slate-400">
                         <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse" /> System Nodes Healthy</span>
-                        <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500" /> Pipeline Sync Primary</span>
+                        <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500" /> Sync Active</span>
                     </div>
                 </div>
             </footer>

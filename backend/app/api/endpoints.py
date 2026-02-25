@@ -49,13 +49,13 @@ def update_po_status(po_id: int, payload: dict, db: Session = Depends(get_db)):
     db_po.status = new_status
     db.commit()
     
-    # Push update back to Genesis
+    # Push update back to source
     try:
         erpnext_service.update_purchase_order_status(db_po.po_number, new_status)
     except:
-        pass # Don't block core flow if Genesis update fails
+        pass # Don't block core flow if Sync update fails
         
-    return {"message": f"PO status updated to {new_status} and synced to Genesis", "status": new_status}
+    return {"message": f"PO status updated to {new_status} and synced", "status": new_status}
 
 @router.patch("/purchase-orders/{po_id}/delivery-date")
 def update_delivery_date(po_id: int, payload: dict, db: Session = Depends(get_db)):
@@ -127,7 +127,7 @@ async def upload_purchase_orders(file: UploadFile = File(...), db: Session = Dep
         created_pos = {} # Map PO Number to PO object to handle flat files
         
         for po_item_data in data:
-            # Smart mapping for Genesis ERP headers
+            # Smart mapping for Source system headers
             po_no = (po_item_data.get('po_number') or 
                      po_item_data.get('Document No.') or 
                      po_item_data.get('Document No') or
@@ -218,11 +218,11 @@ def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_
         po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.id == po_id).first()
         if po:
             po.status = "Consolidated"
-            # Push update back to Genesis
+            # Push update back to source
             try:
                 erpnext_service.update_purchase_order_status(po.po_number, "Consolidated")
             except Exception as e:
-                print(f"Failed to sync PO {po.po_number} to Genesis: {e}")
+                print(f"Failed to sync PO {po.po_number}: {e}")
             
             # Add to association table
             db_shipment.purchase_orders.append(po)
