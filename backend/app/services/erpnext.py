@@ -53,12 +53,17 @@ class ERPNextService:
                     # Clear existing items to re-sync fresh ones
                     db.query(models.Item).filter(models.Item.po_id == db_po.id).delete()
                 else:
-                    # Create our local PO
                     db_po = models.PurchaseOrder(
                         po_number=po_detail.get('name') or po_detail.get('document_no'),
                         order_date=po_detail.get('transaction_date'),
                         supplier_name=po_detail.get('supplier'),
-                        location=po_detail.get('place_of_supply') or po_detail.get('shipping_address_name', '').split('-')[-1].strip() or "Unknown Region"
+                        location=(
+                            po_detail.get('place_of_supply') or 
+                            po_detail.get('shipping_address_name', '').split('-')[-1].strip() or 
+                            po_detail.get('ship_to_name', '').split('-')[-1].strip() or
+                            po_detail.get('custom_region') or
+                            "Unknown Region"
+                        )
                     )
                     db.add(db_po)
                 

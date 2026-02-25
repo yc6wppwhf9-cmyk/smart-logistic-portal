@@ -32,13 +32,14 @@ def fix_database_schema():
         # Add missing columns to shipments if they don't exist
         for col_def in [
             "location VARCHAR(100)",
-            "route VARCHAR(255)"
+            "route VARCHAR(255)",
+            "recommendation TEXT"
         ]:
             col_name = col_def.split()[0]
             try:
                 conn.execute(text(f"ALTER TABLE shipments ADD COLUMN {col_def}"))
                 conn.commit()
-                print(f"Added missing column to shipments: {col_name}")
+                print(f"Verified column in shipments: {col_name}")
             except Exception:
                 pass
 

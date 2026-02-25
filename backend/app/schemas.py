@@ -51,7 +51,6 @@ class ShipmentBase(BaseModel):
     status: str
     location: Optional[str] = None
     route: Optional[str] = None
-    po_ids: List[int] = []
 
 class ShipmentCreate(ShipmentBase):
     po_ids: List[int]
