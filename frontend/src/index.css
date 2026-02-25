@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500/30;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+}
+
+@layer components {
+    .glass-card {
+        @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+    }
+
+    .input-field {
+        @apply bg-black/20 border border-white/10 rounded-lg py-2 px-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all;
+    }
+
+    .btn-primary {
+        @apply bg-brand-600 hover:bg-brand-500 text-white font-semibold py-2 px-4 rounded-lg transition-all active:scale-95 shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-secondary {
+        @apply bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-lg transition-all active:scale-95 border border-white/10;
+    }
+
+    .nav-link {
+        @apply text-slate-400 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-slate-950;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-slate-800 rounded-full hover:bg-slate-700;
+}
