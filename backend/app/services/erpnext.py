@@ -6,9 +6,10 @@ import json
 
 class ERPNextService:
     def __init__(self):
-        self.url = os.getenv("ERPNEXT_URL")
-        self.api_key = os.getenv("ERPNEXT_API_KEY")
-        self.api_secret = os.getenv("ERPNEXT_API_SECRET")
+        # Clean credentials by stripping any accidental whitespace or newlines
+        self.url = (os.getenv("ERPNEXT_URL") or "").strip()
+        self.api_key = (os.getenv("ERPNEXT_API_KEY") or "").strip()
+        self.api_secret = (os.getenv("ERPNEXT_API_SECRET") or "").strip()
         self.headers = {
             "Authorization": f"token {self.api_key}:{self.api_secret}",
             "Content-Type": "application/json",
@@ -48,10 +49,10 @@ class ERPNextService:
 
                 # Create our local PO
                 db_po = models.PurchaseOrder(
-                    po_number=po_detail.get('name'),
+                    po_number=po_detail.get('name') or po_detail.get('document_no'),
                     order_date=po_detail.get('transaction_date'),
                     supplier_name=po_detail.get('supplier'),
-                    location="Mumbai"  # Defaulting or extracting from address
+                    location=po_detail.get('ship_to_name') or "Bihar" # Map from Genesis "Ship To"
                 )
                 db.add(db_po)
                 db.commit()
@@ -59,15 +60,22 @@ class ERPNextService:
 
                 # Add Items
                 for item in po_detail.get('items', []):
+                    # Use Pending Qty if available (typical for Genesis), otherwise fallback to Qty
+                    item_qty = item.get('pending_qty') or item.get('qty') or 0
+                    
+                    # Skip if nothing is pending
+                    if item_qty <= 0:
+                        continue
+
                     db_item = models.Item(
                         item_code=item.get('item_code'),
                         item_name=item.get('item_name'),
                         hsn_code=item.get('gst_hsn_code'),
                         uom=item.get('uom'),
-                        quantity=item.get('qty'),
+                        quantity=item_qty,
                         rate=item.get('rate'),
-                        weight_per_unit=item.get('weight_per_unit', 0), # Custom field check
-                        cbm_per_unit=item.get('cbm_per_unit', 0),       # Custom field check
+                        weight_per_unit=item.get('weight_per_unit', 0),
+                        cbm_per_unit=item.get('cbm_per_unit', 0),
                         po_id=db_po.id
                     )
                     db.add(db_item)
