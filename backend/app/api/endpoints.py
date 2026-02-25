@@ -212,11 +212,18 @@ def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(db_shipment)
     
-    # Update PO status to Consolidated
+    # Update PO status to Consolidated and push to ERP
     for po_id in shipment.po_ids:
         po = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.id == po_id).first()
         if po:
             po.status = "Consolidated"
+            # Push update back to ERPNext
+            try:
+                from ..services.erpnext import erpnext_service
+                erpnext_service.update_purchase_order_status(po.po_number, "Consolidated")
+            except Exception as e:
+                print(f"Failed to sync PO {po.po_number} to ERP: {e}")
+            
             # Add to association table
             db_shipment.purchase_orders.append(po)
             

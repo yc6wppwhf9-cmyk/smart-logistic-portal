@@ -551,27 +551,38 @@ function App() {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Total Weight</div>
-                                            <div className="text-xl font-bold">{plan.total_weight.toLocaleString()} <span className="text-sm font-normal text-slate-500 italic uppercase">kg</span></div>
+                                            <div className="text-xl font-bold">{plan.total_weight.toLocaleString()} <span className="text-xs font-normal text-slate-500 italic uppercase">kg</span></div>
                                         </div>
                                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Total Volume</div>
-                                            <div className="text-xl font-bold">{plan.total_cbm.toFixed(2)} <span className="text-sm font-normal text-slate-500 italic uppercase">CBM</span></div>
+                                            <div className="text-xl font-bold">{plan.total_cbm.toFixed(2)} <span className="text-xs font-normal text-slate-500 italic uppercase">CBM</span></div>
                                         </div>
                                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Included POs</div>
-                                            <div className="text-xl font-bold">{plan.po_ids.length} <span className="text-sm font-normal text-slate-500 italic uppercase">Orders</span></div>
+                                            <div className="text-xl font-bold">{plan.po_ids.length} <span className="text-xs font-normal text-slate-500 italic uppercase">Orders</span></div>
+                                        </div>
+                                        <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                            <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Dispatch Date</div>
+                                            <div className="text-xl font-bold text-brand-400">{plan.dispatch_date}</div>
                                         </div>
                                     </div>
 
                                     <div className="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/20 flex flex-col md:flex-row justify-between items-center gap-4">
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><CheckCircle size={18} /></div>
-                                            <span className="font-bold text-slate-200">AI PLAN: {plan.recommendation}</span>
+                                            <span className="font-bold text-slate-200 text-sm">AI PLAN: {plan.recommendation}</span>
                                         </div>
-                                        <button onClick={() => handleCreateShipment(plan)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-emerald-500/30">DISPATCH TO BIHAR FACTORY <ArrowRight size={18} /></button>
+                                        <button
+                                            onClick={() => handleCreateShipment(plan)}
+                                            disabled={loading}
+                                            className={`bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-emerald-500/30 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            {loading ? <RefreshCw className="animate-spin" size={18} /> : 'DISPATCH TO BIHAR FACTORY'}
+                                            <ArrowRight size={18} />
+                                        </button>
                                     </div>
                                 </div>
                             ))}
