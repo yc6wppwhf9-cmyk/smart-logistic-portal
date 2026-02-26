@@ -194,37 +194,31 @@ function App() {
 
     const loginScreen = (
         <div className="min-h-screen w-full flex items-center justify-center bg-black relative overflow-hidden font-sans">
-            <div
-                className="absolute inset-0 z-0 bg-cover bg-center opacity-40 mix-blend-overlay"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop')" }}
-            ></div>
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
-
             <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-12">
                 <div className="flex-1 text-white">
                     <div className="mb-12">
-                        <img src="/hs_logo.png" alt="High Spirit Logo" className="w-48 md:w-64 max-w-full drop-shadow-2xl" />
+                        <img src="/hs_logo.png" alt="High Spirit Logo" className="w-48 md:w-64 max-w-full" />
                     </div>
 
-                    <h2 className="text-3xl md:text-4xl font-bold mb-2">Powering Seamless Operations for</h2>
-                    <h2 className="text-4xl md:text-5xl font-black text-[#8DC63F] mb-10">High Spirit Ventures</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">Powering Smarter Supply Chains for</h2>
+                    <h2 className="text-4xl md:text-5xl font-black text-[#8DC63F] mb-10 tracking-tight">High Spirit Ventures</h2>
 
                     <div className="space-y-4 mb-12">
                         {[
-                            "Intelligent Carrier Allocation.",
-                            "End-to-End Visibility.",
-                            "Automated Consolidation.",
-                            "Enterprise Grade Security."
+                            { text: "Intelligent Inbound Routing. Every Time.", icon: <CheckCircle size={20} className="text-[#8DC63F]" /> },
+                            { text: "Seamless Visibility. Stronger Operations.", icon: <CheckCircle size={20} className="text-[#8DC63F]" /> },
+                            { text: "Automated Consolidation. Lower Freight Costs.", icon: <CheckCircle size={20} className="text-[#8DC63F]" /> },
+                            { text: "Built for Scale, Speed & Reliability.", icon: <CheckCircle size={20} className="text-[#8DC63F]" /> }
                         ].map((item, i) => (
                             <div key={i} className="flex items-center gap-3 text-lg font-medium text-gray-200">
-                                <CheckCircle size={20} className="text-[#8DC63F]" />
-                                {item}
+                                {item.icon}
+                                {item.text}
                             </div>
                         ))}
                     </div>
 
-                    <p className="text-sm md:text-base text-gray-300 font-medium max-w-xl">
-                        Streamlining inward logistics and supply chain analytics directly to the factory floor.
+                    <p className="text-xs md:text-sm text-gray-400 font-medium max-w-xl">
+                        Delivering deep operational insights and AI-driven logistics optimization to power the factory floor network.
                     </p>
                 </div>
 
