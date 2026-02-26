@@ -393,7 +393,7 @@ function App() {
                                                         </tr>
                                                     </thead>
                                                     <tbody className="divide-y divide-white/5">
-                                                        {pos.filter(p => p.status === 'Pending').flatMap(p => p.items).slice(0, 5).map((item, i) => {
+                                                        {pos.filter(p => ['Open', 'Confirmed'].includes(p.status)).flatMap(p => p.items).slice(0, 5).map((item, i) => {
                                                             const po = pos.find(p => p.id === item.po_id);
                                                             const grade = performance[po?.supplier_name]?.grade || 'B';
                                                             return (
@@ -401,17 +401,17 @@ function App() {
                                                                     <td className="py-3 font-bold">{item.item_name}</td>
                                                                     <td className="py-3 text-center font-mono">{item.quantity} {item.uom}</td>
                                                                     <td className="py-3 text-right">
-                                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${po?.status === 'Dispatched' ? 'bg-emerald-500/10 text-emerald-400' :
-                                                                            po?.status === 'Pending' ? 'bg-amber-500/10 text-amber-500' :
+                                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${po?.status === 'Dispatch' ? 'bg-emerald-500/10 text-emerald-400' :
+                                                                            po?.status === 'Open' ? 'bg-amber-500/10 text-amber-500' :
                                                                                 'bg-brand-500/10 text-brand-400'
                                                                             }`}>
-                                                                            {po?.status || 'PENDING'}
+                                                                            {po?.status || 'OPEN'}
                                                                         </span>
                                                                     </td>
                                                                 </tr>
                                                             );
                                                         })}
-                                                        {pos.filter(p => p.status === 'Pending').length === 0 && (
+                                                        {pos.filter(p => ['Open', 'Confirmed'].includes(p.status)).length === 0 && (
                                                             <tr><td colSpan="3" className="py-8 text-center text-slate-500 italic uppercase">All materials are secured</td></tr>
                                                         )}
                                                     </tbody>
