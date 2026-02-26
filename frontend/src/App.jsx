@@ -46,6 +46,7 @@ function App() {
     const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || 'admin'); // 'admin' or 'supplier'
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('userRole'));
     const [searchTerm, setSearchTerm] = useState('');
+    const [dateFilter, setDateFilter] = useState('');
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
     // Simulate current supplier name if logged in as supplier
@@ -295,10 +296,12 @@ function App() {
         ? pos
         : pos.filter(p => p.supplier_name === currentSupplierName && !['Consolidated', 'Dispatch'].includes(p.status));
 
-    const filteredPos = displayPos.filter(p =>
-        p.po_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.supplier_name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredPos = displayPos.filter(p => {
+        const matchesSearch = p.po_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.supplier_name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesDate = dateFilter ? p.order_date === dateFilter : true;
+        return matchesSearch && matchesDate;
+    });
 
     const getGradeBadge = (name) => {
         const p = performance[name];
@@ -503,11 +506,19 @@ function App() {
                                         <input
                                             type="text"
                                             placeholder="Search PO or Vendor..."
-                                            className="input-field w-full pl-10"
+                                            className="input-field w-full sm:w-64 pl-10"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                         />
                                     </div>
+                                    <div className="relative">
+                                        <input 
+                                            type="date" 
+                                            title="Filter by Order Date"
+                                            className="input-field w-full sm:w-auto"
+                                            value={dateFilter}
+                                            onChange={(e) => setDateFilter(e.target.value)}
+                                        />
                                     {userRole === 'admin' && (
                                         <div className="flex gap-2">
                                             <button className="bg-white/5 hover:bg-white/10 p-2 rounded-lg border border-white/10" title="Filter View">
