@@ -196,7 +196,7 @@ function App() {
             <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
 
                     <div className="mb-12">
-                        <img src="https://logistics-ai-portal.vercel.app/hs_logo.png" alt="High Spirit Logo" className="w-48 md:w-64 max-w-full drop-shadow-2xl" />
+                        <img src="/hs_logo.png" alt="High Spirit Logo" className="w-48 md:w-64 max-w-full drop-shadow-2xl" />
                     </div>
 
                     <h2 className="text-3xl md:text-4xl font-bold mb-2">Powering Seamless Operations for</h2>
