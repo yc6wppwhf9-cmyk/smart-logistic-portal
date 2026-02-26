@@ -197,7 +197,7 @@ function App() {
             <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-12">
                 <div className="flex-1 text-white">
                     <div className="mb-12">
-                        <img src="/hs_logo.png" alt="High Spirit Logo" className="w-48 md:w-64 max-w-full" />
+                        <img src="/priority_logo.png" alt="Priority Logo" className="w-48 md:w-64 max-w-full" />
                     </div>
 
                     <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">Powering Smarter Supply Chains for</h2>
@@ -307,16 +307,18 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+        <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 relative">
+            {/* Background Logo Watermark */}
+            <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center opacity-5">
+                <img src="/priority_logo.png" alt="Priority Logo Watermark" className="w-[80vw] md:w-[50vw] max-w-4xl object-contain" />
+            </div>
+
             {/* Navbar */}
-            <nav className="border-b border-white/10 bg-slate-900/50 backdrop-blur-xl sticky top-0 z-50">
+            <nav className="border-b border-white/10 bg-slate-900/50 backdrop-blur-xl sticky top-0 z-40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         <div className="flex items-center gap-3">
-                            <div className="bg-brand-600 p-1.5 rounded-lg">
-                                <Truck className="text-white" size={20} />
-                            </div>
-                            <span className="text-lg font-bold tracking-tight text-white hidden sm:block">HSCVPL <span className="text-brand-500">LOGISTICS</span></span>
+                            <img src="/priority_logo.png" alt="Priority Logo" className="h-8 object-contain" />
                         </div>
                         <div className="flex items-center space-x-2 sm:space-x-4">
                             <button onClick={() => setActiveTab('dashboard')} className={`nav-link flex items-center gap-2 ${activeTab === 'dashboard' && 'bg-white/5 text-white'}`}><LayoutDashboard size={18} /> <span className="hidden md:block">DASHBOARD</span></button>
