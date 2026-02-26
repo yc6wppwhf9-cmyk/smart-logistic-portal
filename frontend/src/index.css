@@ -3,15 +3,19 @@
 @tailwind utilities;
 
 :root {
-    --brand-color: #0ea5e9;
-    --bg-main: #020617;
+    --brand-color: #8DC63F;
+    --brand-dark: #6D9A2D;
+    --bg-main: #0a0a0a;
     --text-main: #f1f5f9;
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --border-color: rgba(255, 255, 255, 0.08);
 }
 
 [data-theme='light'] {
-    --brand-color: #0284c7;
-    --bg-main: #ffffff;
+    --bg-main: #f8fafc;
     --text-main: #0f172a;
+    --card-bg: rgba(255, 255, 255, 1);
+    --border-color: rgba(0, 0, 0, 0.1);
 }
 
 @layer base {
@@ -26,9 +30,9 @@
 
 @layer components {
     .glass-card {
-        background-color: var(--card-bg, rgba(255, 255, 255, 0.05));
+        background-color: var(--card-bg);
         backdrop-filter: blur(12px);
-        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+        border: 1px solid var(--border-color);
         border-radius: 1rem;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }

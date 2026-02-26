@@ -28,7 +28,9 @@ import {
     Search,
     AlertTriangle,
     Award,
-    Star
+    Star,
+    Key,
+    EyeOff
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -185,32 +187,116 @@ function App() {
         }
     };
 
-    if (!isLoggedIn) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
-                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card p-8 w-full max-w-md text-center">
-                    <div className="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <Truck className="text-white" size={32} />
+    const loginScreen = (
+        <div className="min-h-screen w-full flex items-center justify-center bg-black relative overflow-hidden font-sans">
+            <div 
+                className="absolute inset-0 z-0 bg-cover bg-center opacity-40 mix-blend-overlay" 
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop')" }}
+            ></div>
+            <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
+
+            <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-12">
+                <div className="flex-1 text-white">
+                    <div className="mb-12 flex items-center gap-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-[#FF007F] via-[#FFD700] to-[#00CED1] p-0.5 shadow-2xl skew-y-3 skew-x-3 transform-gpu">
+                            <div className="w-full h-full bg-black flex items-center justify-center">
+                                <Package size={32} className="text-[#FFD700]" />
+                            </div>
+                        </div>
+                        <div>
+                            <h1 className="text-4xl md:text-5xl font-black tracking-tighter">LOGISTOS</h1>
+                            <p className="text-xs font-bold tracking-[0.2em] uppercase text-gray-300">The New Logistics Revolution</p>
+                        </div>
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-2 underline decoration-brand-500 underline-offset-4 tracking-tighter">HSCVPL LOGISTICS</h1>
-                    <p className="text-slate-400 mb-8 text-[10px] font-bold uppercase tracking-[0.2em]">Supply Chain Intelligence Platform</p>
-                    <div className="space-y-4">
-                        <button onClick={() => handleLogin('admin')} className="w-full btn-primary flex items-center justify-center gap-2 py-3">
-                            <Shield size={20} /> Continue as Company Admin
+
+                    <h2 className="text-3xl md:text-4xl font-bold mb-2">Powering Smarter Logistics for</h2>
+                    <h2 className="text-4xl md:text-5xl font-black text-[#8DC63F] mb-10">Growing Businesses</h2>
+
+                    <div className="space-y-4 mb-12">
+                        {[
+                            "Right Courier. Every Time.",
+                            "Seamless Shipping. Stronger Brands.",
+                            "Smart NDR Handling. Fewer Failures.",
+                            "Built for Scale, Speed & Reliability."
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-3 text-lg font-medium text-gray-200">
+                                <CheckCircle size={20} className="text-[#8DC63F]" />
+                                {item}
+                            </div>
+                        ))}
+                    </div>
+
+                    <p className="text-sm md:text-base text-gray-300 font-medium max-w-xl">
+                        Delivering to <span className="text-[#8DC63F] font-bold">30,000+</span> serviceable pincodes across India through <span className="text-[#8DC63F] font-bold">50+</span> trusted carriers via Surface, Freight & Air.
+                    </p>
+                </div>
+
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="w-full max-w-[450px] bg-[#F4F6F0] rounded-2xl p-8 md:p-10 shadow-2xl text-slate-800">
+                    <div className="text-center mb-8">
+                        <h2 className="text-2xl font-bold flex items-center justify-center gap-2 mb-2">
+                            Welcome Back <span role="img" aria-label="wave">👋</span>
+                        </h2>
+                        <p className="text-sm text-slate-500 font-medium flex items-center justify-center gap-2">
+                            <Key size={16} className="text-[#8DC63F]" /> Please enter your credentials to sign in!
+                        </p>
+                    </div>
+
+                    <div className="space-y-5">
+                        <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-1.5">User Name</label>
+                            <input 
+                                type="text" 
+                                id="logistos_username"
+                                placeholder="admin or supplier" 
+                                className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-1.5">Password</label>
+                            <div className="relative">
+                                <input 
+                                    type="password" 
+                                    placeholder="Password" 
+                                    className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all pr-10"
+                                />
+                                <EyeOff size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 cursor-pointer" />
+                            </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between mt-6 mb-6">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-[#8DC63F] focus:ring-[#8DC63F]" />
+                                <span className="text-sm font-medium text-slate-600">Remember Me</span>
+                            </label>
+                            <a href="#" className="text-sm font-bold text-[#6D9A2D] hover:underline">Forgot Password?</a>
+                        </div>
+
+                        <button 
+                            onClick={() => {
+                                const val = document.getElementById('logistos_username')?.value.toLowerCase();
+                                if (val === 'admin') handleLogin('admin');
+                                else handleLogin('supplier');
+                            }} 
+                            className="w-full bg-[#6D9A2D] hover:bg-[#5a8025] text-white font-bold py-3.5 rounded-lg transition-colors shadow-lg shadow-[#6D9A2D]/30"
+                        >
+                            Sign In
                         </button>
-                        <button onClick={() => handleLogin('supplier')} className="w-full btn-secondary flex items-center justify-center gap-2 py-3">
-                            <User size={20} /> Continue as Supplier Partner
-                        </button>
+
+                        <div className="text-center mt-6 text-sm font-medium text-slate-600">
+                            Don't have an account yet? <a href="#" className="text-[#6D9A2D] font-bold hover:underline">Sign up</a>
+                        </div>
                     </div>
                 </motion.div>
             </div>
-        );
-    }
+        </div>
+    );
+
+    if (!isLoggedIn) return loginScreen;
 
     // Role-based filtering
     const displayPos = userRole === 'admin'
         ? pos
-        : pos.filter(p => p.supplier_name === currentSupplierName);
+        : pos.filter(p => p.supplier_name === currentSupplierName && !['Consolidated', 'Dispatch'].includes(p.status));
 
     const filteredPos = displayPos.filter(p =>
         p.po_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -467,7 +553,7 @@ function App() {
                                                     )}
                                                     <td className="px-6 py-4 text-sm font-mono text-slate-400">{p.order_date}</td>
                                                     <td className="px-6 py-4">
-                                                        {userRole === 'supplier' && p.status !== 'Cancelled' ? (
+                                                        {userRole === 'supplier' && !['Cancelled', 'Dispatch', 'Partially Shipped', 'Consolidated'].includes(p.status) ? (
                                                             <div className="flex items-center gap-2">
                                                                 <input
                                                                     type="date"
@@ -490,10 +576,14 @@ function App() {
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        {p.status === 'Cancelled' ? (
-                                                            <span className="text-[10px] bg-red-500/20 text-red-400 px-3 py-1 rounded-full font-bold shadow-sm border border-red-500/10">AUTO-CANCELLED</span>
+                                                        {['Cancelled', 'Dispatch', 'Partially Shipped', 'Consolidated'].includes(p.status) ? (
+                                                            <span className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase border shadow-sm ${p.status === 'Cancelled' ? 'bg-red-500/20 text-red-500 border-red-500/20' : p.status === 'Partially Shipped' ? 'bg-amber-500/20 text-amber-500 border-amber-500/20' : 'bg-brand-500/20 text-brand-400 border-brand-500/20'}`}>
+                                                                {p.status} {p.status === 'Cancelled' && p.date_change_count >= 3 && '- Auto'}
+                                                                {p.status === 'Dispatch' && <CheckCircle size={10} className="inline ml-1" />}
+                                                                {p.status === 'Partially Shipped' && <AlertTriangle size={10} className="inline ml-1" />}
+                                                            </span>
                                                         ) : (
-                                                            userRole === 'supplier' && p.status !== 'Consolidated' ? (
+                                                            userRole === 'supplier' ? (
                                                                 <select
                                                                     className="bg-brand-500/10 border border-brand-500/20 rounded-lg px-2 py-1 text-[10px] font-bold uppercase focus:ring-2 focus:ring-brand-500 focus:outline-none text-brand-400 cursor-pointer"
                                                                     value={p.status}
@@ -504,6 +594,7 @@ function App() {
                                                                     <option value="In Production">In Production</option>
                                                                     <option value="Completed">Completed</option>
                                                                     <option value="Dispatch">Dispatch</option>
+                                                                    <option value="Partially Shipped">Partially Shipped</option>
                                                                     <option value="Cancelled">Cancel Order</option>
                                                                 </select>
                                                             ) : (
