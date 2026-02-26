@@ -194,6 +194,11 @@ function App() {
 
     const loginScreen = (
         <div className="min-h-screen w-full flex items-center justify-center bg-black relative overflow-hidden font-sans">
+            {/* Background Logo Watermark */}
+            <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center opacity-5">
+                <img src="/hs_logo.png" alt="High Spirit Watermark" className="w-[80vw] md:w-[50vw] max-w-4xl object-contain" />
+            </div>
+
             <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-12">
                 <div className="flex-1 text-white">
                     <div className="mb-12">
@@ -310,7 +315,7 @@ function App() {
         <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 relative">
             {/* Background Logo Watermark */}
             <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center opacity-5">
-                <img src="/priority_logo.png" alt="Priority Logo Watermark" className="w-[80vw] md:w-[50vw] max-w-4xl object-contain" />
+                <img src="/hs_logo.png" alt="High Spirit Logo Watermark" className="w-[80vw] md:w-[50vw] max-w-4xl object-contain" />
             </div>
 
             {/* Navbar */}
