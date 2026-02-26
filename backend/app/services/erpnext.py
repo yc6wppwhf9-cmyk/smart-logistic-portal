@@ -49,7 +49,8 @@ class ERPNextService:
                     # Update existing PO header
                     db_po.order_date = po_detail.get('transaction_date')
                     db_po.supplier_name = po_detail.get('supplier')
-                    db_po.location = po_detail.get('ship_to_name') or "Bihar"
+                    db_po.drop_location = po_detail.get('shipping_address_name', '').split('-')[-1].strip() or po_detail.get('ship_to_name', '').split('-')[-1].strip() or po_detail.get('custom_region') or "Bihar Factory"
+                    db_po.location = po_detail.get('supplier_address_name', '').split('-')[-1].strip() or po_detail.get('supplier_address', '').split('-')[0].strip() or po_detail.get('place_of_supply', '').split('-')[-1].strip() or "Mumbai Region"
                     # Clear existing items to re-sync fresh ones
                     db.query(models.Item).filter(models.Item.po_id == db_po.id).delete()
                 else:
@@ -57,12 +58,17 @@ class ERPNextService:
                         po_number=po_detail.get('name') or po_detail.get('document_no'),
                         order_date=po_detail.get('transaction_date'),
                         supplier_name=po_detail.get('supplier'),
-                        location=(
-                            po_detail.get('place_of_supply') or 
+                        drop_location=(
                             po_detail.get('shipping_address_name', '').split('-')[-1].strip() or 
                             po_detail.get('ship_to_name', '').split('-')[-1].strip() or
                             po_detail.get('custom_region') or
-                            "Unknown Region"
+                            "Bihar Factory"
+                        ),
+                        location=(
+                            po_detail.get('supplier_address_name', '').split('-')[-1].strip() or 
+                            po_detail.get('supplier_address', '').split('-')[0].strip() or
+                            po_detail.get('place_of_supply', '').split('-')[-1].strip() or
+                            "Mumbai Region"
                         )
                     )
                     db.add(db_po)

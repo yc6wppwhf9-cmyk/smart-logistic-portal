@@ -45,6 +45,7 @@ class PurchaseOrder(Base):
     supplier_name = Column(String(255))
     supplier_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     location = Column(String(100))
+    drop_location = Column(String(100), nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     status = Column(String(50), default="Open") # Open, Confirmed, In Production, Completed, Dispatch, Cancelled
     
@@ -60,6 +61,7 @@ class Shipment(Base):
     total_weight = Column(Float)
     total_cbm = Column(Float)
     location = Column(String(100), nullable=True)
+    drop_location = Column(String(100), nullable=True)
     route = Column(String(255), nullable=True)
     recommendation = Column(String(500), nullable=True)
     status = Column(String(50), default="Proposed") # Proposed, Dispatched

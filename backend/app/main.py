@@ -17,7 +17,8 @@ def fix_database_schema():
         for col_def in [
             "expected_delivery_date DATE",
             "date_change_count INTEGER DEFAULT 0",
-            "supplier_user_id INTEGER"
+            "supplier_user_id INTEGER",
+            "drop_location VARCHAR(100)"
         ]:
             col_name = col_def.split()[0]
             try:
@@ -33,7 +34,8 @@ def fix_database_schema():
         for col_def in [
             "location VARCHAR(100)",
             "route VARCHAR(255)",
-            "recommendation TEXT"
+            "recommendation TEXT",
+            "drop_location VARCHAR(100)"
         ]:
             col_name = col_def.split()[0]
             try:

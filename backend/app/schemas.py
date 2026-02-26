@@ -29,6 +29,7 @@ class PurchaseOrderBase(BaseModel):
     date_change_count: int = 0
     supplier_name: Optional[str] = "Unknown"
     location: Optional[str] = "Unknown"
+    drop_location: Optional[str] = "Unknown"
 
 class PurchaseOrderCreate(PurchaseOrderBase):
     items: List[ItemCreate]
@@ -52,6 +53,7 @@ class ShipmentBase(BaseModel):
     recommendation: str
     status: str
     location: Optional[str] = None
+    drop_location: Optional[str] = None
     route: Optional[str] = None
 
 class ShipmentCreate(ShipmentBase):

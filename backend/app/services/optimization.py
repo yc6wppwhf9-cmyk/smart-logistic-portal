@@ -41,20 +41,22 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
     if not pending_pos:
         return []
 
-    # Group POs by location (State/City)
+    # Group POs by location (State/City) and Destination (Drop Location)
     grouped_pos = {}
     for po in pending_pos:
-        loc = po.location or "Unknown Region"
-        if loc not in grouped_pos:
-            grouped_pos[loc] = []
-        grouped_pos[loc].append(po)
+        loc = po.location or "Unknown Origin"
+        drop = po.drop_location or "Unknown Destination"
+        key = (loc, drop)
+        if key not in grouped_pos:
+            grouped_pos[key] = []
+        grouped_pos[key].append(po)
 
     all_plans = []
     today = date.today()
     dispatch_dates = get_next_dispatch_dates(today)
     primary_date = dispatch_dates[0] if dispatch_dates else today
 
-    for loc, pos in grouped_pos.items():
+    for (loc, drop), pos in grouped_pos.items():
         totals = calculate_totals(pos)
         total_weight = totals["weight"]
         total_cbm = totals["cbm"]
@@ -69,10 +71,10 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
             recommendation = f"Strategic volume for {loc}. Priority transit recommended."
         
         # Suggest route based on location
-        if loc.upper() == "BIHAR":
-            route = "LOCAL BIHAR → BIHAR FACTORY"
+        if loc.upper() == drop.upper():
+            route = f"LOCAL {loc.upper()} → {drop.upper()}"
         else:
-            route = f"{loc.upper()} → BIHAR FACTORY"
+            route = f"{loc.upper()} → {drop.upper()}"
         
         # Calculate Distance and ETA (Assuming 600km/day)
         is_local = loc.upper() in ["BIHAR", "PATNA", "MUZAFFARPUR"]
@@ -100,7 +102,7 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
             
         days_on_road = max(1, math.ceil(distance_km / 600.0))
         expected_arrival = primary_date + timedelta(days=days_on_road)
-        
+
         plan = {
             "dispatch_date": primary_date,
             "expected_arrival_date": expected_arrival,
@@ -110,6 +112,7 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
             "total_cbm": total_cbm,
             "recommendation": recommendation,
             "location": loc,
+            "drop_location": drop,
             "route": route,
             "po_ids": [po.id for po in pos],
             "status": "Proposed"
