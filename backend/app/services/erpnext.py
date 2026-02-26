@@ -49,26 +49,26 @@ class ERPNextService:
                     # Update existing PO header
                     db_po.order_date = po_detail.get('transaction_date')
                     db_po.supplier_name = po_detail.get('supplier')
-                    db_po.drop_location = po_detail.get('shipping_address_name', '').split('-')[-1].strip() or po_detail.get('ship_to_name', '').split('-')[-1].strip() or po_detail.get('custom_region') or "Bihar Factory"
-                    db_po.location = po_detail.get('supplier_address_name', '').split('-')[-1].strip() or po_detail.get('supplier_address', '').split('-')[0].strip() or po_detail.get('place_of_supply', '').split('-')[-1].strip() or "Mumbai Region"
+                    db_po.drop_location = po_detail.get('shipping_address_name', '').split('-')[-1].strip() or po_detail.get('ship_to_name', '').split('-')[-1].strip() or po_detail.get('custom_region') or "Destination Warehouse"
+                    db_po.location = po_detail.get('supplier_address_name', '').split('-')[-1].strip() or po_detail.get('supplier_address', '').split('-')[0].strip() or po_detail.get('place_of_supply', '').split('-')[-1].strip() or "Origin Facility"
                     # Clear existing items to re-sync fresh ones
                     db.query(models.Item).filter(models.Item.po_id == db_po.id).delete()
                 else:
                     db_po = models.PurchaseOrder(
-                        po_number=po_detail.get('name') or po_detail.get('document_no'),
+                        po_number=po['name'],
                         order_date=po_detail.get('transaction_date'),
                         supplier_name=po_detail.get('supplier'),
                         drop_location=(
                             po_detail.get('shipping_address_name', '').split('-')[-1].strip() or 
                             po_detail.get('ship_to_name', '').split('-')[-1].strip() or
                             po_detail.get('custom_region') or
-                            "Bihar Factory"
+                            "Destination Warehouse"
                         ),
                         location=(
                             po_detail.get('supplier_address_name', '').split('-')[-1].strip() or 
                             po_detail.get('supplier_address', '').split('-')[0].strip() or
                             po_detail.get('place_of_supply', '').split('-')[-1].strip() or
-                            "Mumbai Region"
+                            "Origin Facility"
                         )
                     )
                     db.add(db_po)
@@ -147,8 +147,8 @@ class ERPNextService:
                 "reference_doctype": "Purchase Order",
                 "reference_name": po_number,
                 "content": f"<b>Sync Trace:</b> Supply status changed to <b>{status}</b>",
-                "comment_email": "sync-service@hscvpl.com",
-                "comment_by": "HSCVPL Sync"
+                "comment_email": "sync-service@prior1ty.com",
+                "comment_by": "Prior1ty Sync"
             }
             requests.post(comment_endpoint, headers=self.headers, json=comment_payload, timeout=5)
             
