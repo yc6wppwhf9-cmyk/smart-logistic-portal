@@ -195,29 +195,19 @@ function App() {
             ></div>
             <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
 
-            <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-12">
-                <div className="flex-1 text-white">
-                    <div className="mb-12 flex items-center gap-4">
-                        <div className="w-16 h-16 bg-gradient-to-br from-[#FF007F] via-[#FFD700] to-[#00CED1] p-0.5 shadow-2xl skew-y-3 skew-x-3 transform-gpu">
-                            <div className="w-full h-full bg-black flex items-center justify-center">
-                                <Package size={32} className="text-[#FFD700]" />
-                            </div>
-                        </div>
-                        <div>
-                            <h1 className="text-4xl md:text-5xl font-black tracking-tighter">LOGISTOS</h1>
-                            <p className="text-xs font-bold tracking-[0.2em] uppercase text-gray-300">The New Logistics Revolution</p>
-                        </div>
+                    <div className="mb-12">
+                        <img src="https://logistics-ai-portal.vercel.app/hs_logo.png" alt="High Spirit Logo" className="w-48 md:w-64 max-w-full drop-shadow-2xl" />
                     </div>
 
-                    <h2 className="text-3xl md:text-4xl font-bold mb-2">Powering Smarter Logistics for</h2>
-                    <h2 className="text-4xl md:text-5xl font-black text-[#8DC63F] mb-10">Growing Businesses</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-2">Powering Seamless Operations for</h2>
+                    <h2 className="text-4xl md:text-5xl font-black text-[#8DC63F] mb-10">High Spirit Ventures</h2>
 
                     <div className="space-y-4 mb-12">
                         {[
-                            "Right Courier. Every Time.",
-                            "Seamless Shipping. Stronger Brands.",
-                            "Smart NDR Handling. Fewer Failures.",
-                            "Built for Scale, Speed & Reliability."
+                            "Intelligent Carrier Allocation.",
+                            "End-to-End Visibility.",
+                            "Automated Consolidation.",
+                            "Enterprise Grade Security."
                         ].map((item, i) => (
                             <div key={i} className="flex items-center gap-3 text-lg font-medium text-gray-200">
                                 <CheckCircle size={20} className="text-[#8DC63F]" />
@@ -227,7 +217,7 @@ function App() {
                     </div>
 
                     <p className="text-sm md:text-base text-gray-300 font-medium max-w-xl">
-                        Delivering to <span className="text-[#8DC63F] font-bold">30,000+</span> serviceable pincodes across India through <span className="text-[#8DC63F] font-bold">50+</span> trusted carriers via Surface, Freight & Air.
+                        Streamlining inward logistics and supply chain analytics directly to the factory floor.
                     </p>
                 </div>
 
@@ -247,9 +237,10 @@ function App() {
                             <input 
                                 type="text" 
                                 id="logistos_username"
-                                placeholder="admin or supplier" 
+                                placeholder="E.g., admin or supplier" 
                                 className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all"
                             />
+                            <p className="text-xs text-slate-400 mt-1">Hint: Type 'admin' or 'supplier' to test login.</p>
                         </div>
                         <div>
                             <label className="block text-sm font-bold text-slate-700 mb-1.5">Password</label>
