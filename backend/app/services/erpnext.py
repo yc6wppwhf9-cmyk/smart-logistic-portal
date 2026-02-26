@@ -87,6 +87,7 @@ class ERPNextService:
                     db_item = models.Item(
                         item_code=item.get('item_code'),
                         item_name=item.get('item_name'),
+                        item_group=item.get('item_group'),
                         hsn_code=item.get('gst_hsn_code'),
                         uom=item.get('uom'),
                         quantity=item_qty,

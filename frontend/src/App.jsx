@@ -347,7 +347,7 @@ function App() {
                             <div className="flex flex-col md:flex-row justify-between gap-6">
                                 <div>
                                     <h1 className="text-2xl font-bold">WELCOME TO PRIOR1TY, {userRole === 'admin' ? 'ADMINISTRATOR' : currentSupplierName.toUpperCase()}</h1>
-                                    <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Precision logistics monitoring for Prior1ty supply chain network</p>
+                                    <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Precision logistics monitoring for Prior1ty Luggage Manufacturing network</p>
                                 </div>
                                 <div className="flex gap-4">
                                     {userRole === 'admin' && (
@@ -603,7 +603,8 @@ function App() {
                                                                     <option value="Open">Open</option>
                                                                     <option value="Confirmed">Confirmed</option>
                                                                     <option value="In Production">In Production</option>
-                                                                    <option value="Completed">Completed</option>
+                                                                    <option value="Quality Checked">Quality Checked</option>
+                                                                    <option value="Ready for Dispatch">Ready for Dispatch</option>
                                                                     <option value="Dispatch">Dispatch</option>
                                                                     <option value="Partially Shipped">Partially Shipped</option>
                                                                     <option value="Cancelled">Cancel Order</option>
@@ -624,13 +625,13 @@ function App() {
 
                     {activeTab === 'shipments' && userRole === 'admin' && (
                         <motion.div key="shipments" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
-                            <div className="flex justify-between items-center">
+                                <div className="flex justify-between items-center">
                                 <div>
-                                    <h1 className="text-2xl font-bold uppercase">PRIOR1TY CONSOLIDATION ENGINE</h1>
-                                    <p className="text-slate-400 text-sm">Automated grouping of regional POs into high-utilization vehicle loads</p>
+                                    <h1 className="text-2xl font-bold uppercase">PRIOR1TY LUGGAGE CONSOLIDATION</h1>
+                                    <p className="text-slate-400 text-sm">Automated grouping of regional component shipments into high-utilization vehicle loads</p>
                                 </div>
                                 <div className="bg-brand-500/10 px-4 py-2 rounded-xl text-brand-400 font-bold border border-brand-500/20 flex items-center gap-2">
-                                    <TrendingDown size={18} /> Cost Efficiency: +24%
+                                    <TrendingDown size={18} /> Volume Index: +24%
                                 </div>
                             </div>
 

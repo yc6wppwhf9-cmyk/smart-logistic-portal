@@ -29,13 +29,20 @@ def calculate_totals(pos: List[PurchaseOrder]) -> Dict[str, float]:
             total_cbm += c * item.quantity
     return {"weight": total_weight, "cbm": total_cbm}
 
-def suggest_vehicle(weight: float) -> str:
-    if weight <= 750:
-        return "Tata Ace"
-    elif weight <= 1500:
-        return "Pickup"
+def suggest_vehicle(weight: float, cbm: float) -> str:
+    # Luggage is high volume, low weight. Vehicles usually cube out before they weight out.
+    if weight <= 750 and cbm <= 6:
+        return "Tata Ace (1.5T)"
+    elif weight <= 1500 and cbm <= 10:
+        return "Pickup / Bolero"
+    elif weight <= 4500 and cbm <= 28:
+        return "17ft HB Truck"
+    elif weight <= 9000 and cbm <= 42:
+        return "19ft Container"
+    elif weight <= 15000 and cbm <= 60:
+        return "Tauras 22ft"
     else:
-        return "Truck"
+        return "Multi-Axle / 32ft MX"
 
 def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
     if not pending_pos:
@@ -62,7 +69,7 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
         total_cbm = totals["cbm"]
         
         days_to_dispatch = (primary_date - today).days
-        vehicle = suggest_vehicle(total_weight)
+        vehicle = suggest_vehicle(total_weight, total_cbm)
         
         recommendation = f"Optimized for {loc} logistics lane."
         if total_weight < 500 and days_to_dispatch > 1:

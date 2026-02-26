@@ -35,8 +35,8 @@ def delete_all_pos(db: Session = Depends(get_db)):
 
 @router.patch("/purchase-orders/{po_id}/status")
 def update_po_status(po_id: int, payload: dict, db: Session = Depends(get_db)):
-    # Allowed statuses based on user request
-    allowed_statuses = ["Pending", "Confirmed", "In Production", "Packed", "Loaded", "Dispatched", "Cancelled"]
+    # Allowed statuses based on user request (Luggage Manufacturing Flow)
+    allowed_statuses = ["Open", "Confirmed", "In Production", "Quality Checked", "Ready for Dispatch", "Dispatch", "Partially Shipped", "Cancelled"]
     new_status = payload.get("status")
     
     if new_status not in allowed_statuses:

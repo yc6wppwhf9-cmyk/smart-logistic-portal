@@ -17,6 +17,7 @@ class Item(Base):
     id = Column(Integer, primary_key=True, index=True)
     item_code = Column(String(100))
     item_name = Column(String(255))
+    item_group = Column(String(100), nullable=True)
     hsn_code = Column(String(50))
     uom = Column(String(50))
     quantity = Column(Integer)

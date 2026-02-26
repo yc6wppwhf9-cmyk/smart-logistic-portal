@@ -5,6 +5,7 @@ from datetime import datetime, date
 class ItemBase(BaseModel):
     item_code: Optional[str] = None
     item_name: Optional[str] = None
+    item_group: Optional[str] = None
     hsn_code: Optional[str] = None
     uom: Optional[str] = None
     quantity: int
