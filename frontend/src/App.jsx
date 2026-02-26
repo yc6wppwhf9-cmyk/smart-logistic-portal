@@ -60,6 +60,11 @@ function App() {
     });
 
     useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
     }, [theme]);
@@ -189,12 +194,14 @@ function App() {
 
     const loginScreen = (
         <div className="min-h-screen w-full flex items-center justify-center bg-black relative overflow-hidden font-sans">
-            <div 
-                className="absolute inset-0 z-0 bg-cover bg-center opacity-40 mix-blend-overlay" 
+            <div
+                className="absolute inset-0 z-0 bg-cover bg-center opacity-40 mix-blend-overlay"
                 style={{ backgroundImage: "url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop')" }}
             ></div>
             <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
 
+            <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-12">
+                <div className="flex-1 text-white">
                     <div className="mb-12">
                         <img src="/hs_logo.png" alt="High Spirit Logo" className="w-48 md:w-64 max-w-full drop-shadow-2xl" />
                     </div>
@@ -234,10 +241,10 @@ function App() {
                     <div className="space-y-5">
                         <div>
                             <label className="block text-sm font-bold text-slate-700 mb-1.5">User Name</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 id="logistos_username"
-                                placeholder="E.g., admin or supplier" 
+                                placeholder="E.g., admin or supplier"
                                 className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all"
                             />
                             <p className="text-xs text-slate-400 mt-1">Hint: Type 'admin' or 'supplier' to test login.</p>
@@ -245,15 +252,15 @@ function App() {
                         <div>
                             <label className="block text-sm font-bold text-slate-700 mb-1.5">Password</label>
                             <div className="relative">
-                                <input 
-                                    type="password" 
-                                    placeholder="Password" 
+                                <input
+                                    type="password"
+                                    placeholder="Password"
                                     className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all pr-10"
                                 />
                                 <EyeOff size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 cursor-pointer" />
                             </div>
                         </div>
-                        
+
                         <div className="flex items-center justify-between mt-6 mb-6">
                             <label className="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-[#8DC63F] focus:ring-[#8DC63F]" />
@@ -262,12 +269,12 @@ function App() {
                             <a href="#" className="text-sm font-bold text-[#6D9A2D] hover:underline">Forgot Password?</a>
                         </div>
 
-                        <button 
+                        <button
                             onClick={() => {
                                 const val = document.getElementById('logistos_username')?.value.toLowerCase();
                                 if (val === 'admin') handleLogin('admin');
                                 else handleLogin('supplier');
-                            }} 
+                            }}
                             className="w-full bg-[#6D9A2D] hover:bg-[#5a8025] text-white font-bold py-3.5 rounded-lg transition-colors shadow-lg shadow-[#6D9A2D]/30"
                         >
                             Sign In

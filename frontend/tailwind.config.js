@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
@@ -8,20 +9,21 @@ export default {
         extend: {
             colors: {
                 brand: {
-                    50: '#f0f9ff',
-                    100: '#e0f2fe',
-                    200: '#bae6fd',
-                    300: '#7dd3fc',
-                    400: '#38bdf8',
-                    500: '#0ea5e9',
-                    600: '#0284c7',
-                    700: '#0369a1',
-                    800: '#075985',
-                    900: '#0c4a6e',
-                    950: '#082f49',
+                    50: '#f4f8ec',
+                    100: '#e5f0d5',
+                    200: '#cddeb0',
+                    300: '#b0c885',
+                    400: '#94b35e',
+                    500: '#8DC63F',
+                    600: '#6D9A2D',
+                    700: '#537a22',
+                    800: '#42611e',
+                    900: '#38521c',
+                    950: '#1d2f0a',
                 },
                 slate: {
-                    950: '#020617',
+                    900: '#111111',
+                    950: '#000000',
                 }
             },
             backgroundImage: {
