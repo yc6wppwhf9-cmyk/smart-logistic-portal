@@ -343,8 +343,8 @@ function App() {
                             {/* Summary Header */}
                             <div className="flex flex-col md:flex-row justify-between gap-6">
                                 <div>
-                                    <h1 className="text-2xl font-bold">WELCOME TO HSCVPL, {userRole === 'admin' ? 'ADMINISTRATOR' : currentSupplierName.toUpperCase()}</h1>
-                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Precision logistics monitoring for Bihar Factory supply chain</p>
+                                    <h1 className="text-2xl font-bold">WELCOME TO PRIOR1TY, {userRole === 'admin' ? 'ADMINISTRATOR' : currentSupplierName.toUpperCase()}</h1>
+                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Precision logistics monitoring for Prior1ty supply chain network</p>
                                 </div>
                                 <div className="flex gap-4">
                                     {userRole === 'admin' && (
@@ -614,7 +614,7 @@ function App() {
                         <motion.div key="shipments" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <h1 className="text-2xl font-bold uppercase">HSCVPL CONSOLIDATION ENGINE</h1>
+                                    <h1 className="text-2xl font-bold uppercase">PRIOR1TY CONSOLIDATION ENGINE</h1>
                                     <p className="text-slate-400 text-sm">Automated grouping of regional POs into high-utilization vehicle loads</p>
                                 </div>
                                 <div className="bg-brand-500/10 px-4 py-2 rounded-xl text-brand-400 font-bold border border-brand-500/20 flex items-center gap-2">
@@ -632,7 +632,7 @@ function App() {
                                             <div className="w-16 h-16 bg-brand-500/10 rounded-2xl flex items-center justify-center text-brand-400 shadow-inner"><Calendar size={32} /></div>
                                             <div>
                                                 <div className="text-xs font-bold uppercase text-slate-500 tracking-widest mb-1">Route Suggestion</div>
-                                                <div className="text-xl font-bold text-brand-400">{plan.route || 'TRANSIT → BIHAR'}</div>
+                                                <div className="text-xl font-bold text-brand-400">{plan.route || 'TRANSIT → DESTINATION'}</div>
                                                 <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">REGION: {plan.location || 'Unknown'}</div>
                                             </div>
                                         </div>
@@ -731,7 +731,7 @@ function App() {
                                             </div>
                                             <button onClick={handleLogout} className="text-xs bg-red-500/10 text-red-500 px-3 py-1.5 rounded-lg border border-red-500/20 font-bold hover:bg-red-500/20 transition-all uppercase">Sign Out</button>
                                         </div>
-                                        <p className="text-[10px] text-slate-500 italic uppercase font-bold tracking-widest">SECURED BY HSCVPL ENTERPRISE</p>
+                                        <p className="text-[10px] text-slate-500 italic uppercase font-bold tracking-widest">SECURED BY PRIOR1TY ENTERPRISE</p>
                                     </div>
                                 </div>
 
@@ -758,7 +758,7 @@ function App() {
                 <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest font-bold text-slate-500">
                     <div className="flex items-center gap-2">
                         <Truck size={12} className="text-brand-500" />
-                        HSCVPL Supply Chain Intelligence © 2026
+                        Prior1ty Supply Chain Intelligence © 2026
                     </div>
                     <div className="flex gap-6 text-slate-400">
                         <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse" /> System Nodes Healthy</span>
