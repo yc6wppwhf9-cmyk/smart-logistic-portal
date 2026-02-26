@@ -105,15 +105,16 @@ class ERPNextService:
             
         endpoint = f"{self.url}/api/resource/Purchase Order/{po_number}"
         
-        # We try to update multiple possible field names to be safe
-        payload = {
-            "custom_portal_supply_status": status,
-            "custom_portal_status": status
-        }
-        
         try:
-            # 1. Try to update the custom field
-            response = requests.put(endpoint, headers=self.headers, json=payload, timeout=5)
+            # 1. Update the custom field using set_value (works better for submitted docs)
+            set_val_endpoint = f"{self.url}/api/method/frappe.client.set_value"
+            payload = {
+                "doctype": "Purchase Order",
+                "name": po_number,
+                "fieldname": "custom_portal_supply_status",
+                "value": status
+            }
+            response = requests.post(set_val_endpoint, headers=self.headers, json=payload, timeout=5)
             if response.status_code != 200:
                  print(f"ERPNext Field Update Note: {response.text}")
             
