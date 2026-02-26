@@ -365,19 +365,19 @@ function App() {
                                             <div>
                                                 <div className="flex justify-between text-xs mb-2">
                                                     <span className="text-slate-400 font-bold uppercase">Ready to Dispatch</span>
-                                                    <span className="text-white font-bold">{pos.filter(p => ['Packed', 'Loaded', 'Dispatched'].includes(p.status)).length} / {pos.filter(p => p.status !== 'Cancelled').length} Orders</span>
+                                                    <span className="text-white font-bold">{pos.filter(p => ['Completed', 'Dispatch'].includes(p.status)).length} / {pos.filter(p => p.status !== 'Cancelled').length} Orders</span>
                                                 </div>
                                                 <div className="h-2 bg-black/40 rounded-full overflow-hidden">
                                                     <div
                                                         className="h-full bg-brand-500 transition-all duration-1000"
-                                                        style={{ width: `${(pos.filter(p => ['Packed', 'Loaded', 'Dispatched'].includes(p.status)).length / (pos.filter(p => p.status !== 'Cancelled').length || 1)) * 100}%` }}
+                                                        style={{ width: `${(pos.filter(p => ['Completed', 'Dispatch'].includes(p.status)).length / (pos.filter(p => p.status !== 'Cancelled').length || 1)) * 100}%` }}
                                                     />
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                                                     <div className="text-2xl font-bold text-emerald-400 whitespace-nowrap">
-                                                        {Math.round((pos.filter(p => ['Packed', 'Loaded', 'Dispatched'].includes(p.status)).length / (pos.filter(p => p.status !== 'Cancelled').length || 1)) * 100)}
+                                                        {Math.round((pos.filter(p => ['Completed', 'Dispatch'].includes(p.status)).length / (pos.filter(p => p.status !== 'Cancelled').length || 1)) * 100) || 0}
                                                         <span className="text-[10px] ml-1">%</span>
                                                     </div>
                                                     <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Ready</div>
@@ -499,16 +499,15 @@ function App() {
                                                                     value={p.status}
                                                                     onChange={(e) => handleUpdateStatus(p.id, e.target.value)}
                                                                 >
-                                                                    <option value="Pending">Pending</option>
+                                                                    <option value="Open">Open</option>
                                                                     <option value="Confirmed">Confirmed</option>
                                                                     <option value="In Production">In Production</option>
-                                                                    <option value="Packed">Packed</option>
-                                                                    <option value="Loaded">Loaded</option>
-                                                                    <option value="Dispatched">Dispatched</option>
+                                                                    <option value="Completed">Completed</option>
+                                                                    <option value="Dispatch">Dispatch</option>
                                                                     <option value="Cancelled">Cancel Order</option>
                                                                 </select>
                                                             ) : (
-                                                                <span className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase border ${p.status === 'Pending' ? 'bg-amber-500/10 text-amber-500 border-amber-500/10' : 'bg-brand-500/10 text-brand-400 border-brand-500/10'}`}>{p.status}</span>
+                                                                <span className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase border ${p.status === 'Open' ? 'bg-amber-500/10 text-amber-500 border-amber-500/10' : p.date_change_count > 2 ? 'bg-red-500/10 text-red-500 border-red-500/10' : 'bg-brand-500/10 text-brand-400 border-brand-500/10'}`}>{p.status}</span>
                                                             )
                                                         )}
                                                     </td>

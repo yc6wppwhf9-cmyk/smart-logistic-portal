@@ -44,6 +44,8 @@ class PurchaseOrder(PurchaseOrderBase):
 
 class ShipmentBase(BaseModel):
     dispatch_date: date
+    expected_arrival_date: Optional[date] = None
+    distance_km: Optional[int] = None
     vehicle_type: str
     total_weight: float
     total_cbm: float

@@ -186,7 +186,7 @@ async def upload_purchase_orders(file: UploadFile = File(...), db: Session = Dep
 
 @router.post("/optimize", response_model=List[schemas.ShipmentCreate])
 def get_optimization(db: Session = Depends(get_db)):
-    pending_pos = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.status == "Pending").all()
+    pending_pos = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.status == "Open").all()
     if not pending_pos:
         return []
     

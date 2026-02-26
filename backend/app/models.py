@@ -46,7 +46,7 @@ class PurchaseOrder(Base):
     supplier_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     location = Column(String(100))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    status = Column(String(50), default="Pending") # Pending, Shipped, Cancelled
+    status = Column(String(50), default="Open") # Open, Confirmed, In Production, Completed, Dispatch, Cancelled
     
     items = relationship("Item", back_populates="purchase_order", cascade="all, delete-orphan")
     shipments = relationship("Shipment", secondary=shipment_po_association, back_populates="purchase_orders")

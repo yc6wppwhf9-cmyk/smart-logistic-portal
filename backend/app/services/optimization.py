@@ -1,5 +1,7 @@
 from datetime import date, timedelta
 from typing import List, Dict
+import random
+import math
 from ..models import PurchaseOrder, Item
 from ..schemas import ShipmentCreate
 
@@ -72,8 +74,37 @@ def optimize_shipments(pending_pos: List[PurchaseOrder]) -> List[Dict]:
         else:
             route = f"{loc.upper()} → BIHAR FACTORY"
         
+        # Calculate Distance and ETA (Assuming 600km/day)
+        is_local = loc.upper() in ["BIHAR", "PATNA", "MUZAFFARPUR"]
+        
+        # Standardize distances to common supply hubs for consistent data
+        distance_map = {
+            "MUMBAI": 1850,
+            "DELHI": 1050,
+            "PUNE": 1780,
+            "AHMEDABAD": 1500,
+            "CHENNAI": 2300,
+            "BANGALORE": 2100,
+            "KOLKATA": 550,
+            "SURAT": 1450,
+        }
+        
+        # Determine distance
+        if is_local:
+            distance_km = random.randint(50, 250)
+        else:
+            # Try to match the location name to our map, or generate a realistic far distance
+            loc_upper = loc.upper()
+            found_dist = next((v for k, v in distance_map.items() if k in loc_upper), None)
+            distance_km = found_dist if found_dist else random.randint(800, 2500)
+            
+        days_on_road = max(1, math.ceil(distance_km / 600.0))
+        expected_arrival = primary_date + timedelta(days=days_on_road)
+        
         plan = {
             "dispatch_date": primary_date,
+            "expected_arrival_date": expected_arrival,
+            "distance_km": distance_km,
             "vehicle_type": vehicle,
             "total_weight": total_weight,
             "total_cbm": total_cbm,
