@@ -194,16 +194,16 @@ function App() {
     };
 
     const loginScreen = (
-        <div className="min-h-screen w-full flex items-center justify-center bg-black relative overflow-hidden font-sans">
+        <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-black relative overflow-hidden font-sans transition-colors duration-300">
             {/* Background Logo Watermark */}
-            <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center opacity-5">
-                <img src="/hs_logo.png" alt="High Spirit Watermark" className="w-[80vw] md:w-[50vw] max-w-4xl object-contain" />
+            <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center opacity-10">
+                <img src="/hs_logo.png" alt="High Spirit Watermark" className="w-[80vw] md:w-[50vw] max-w-4xl object-contain mix-blend-multiply dark:invert dark:mix-blend-screen" />
             </div>
 
             <div className="z-10 w-full max-w-[1200px] flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-12">
-                <div className="flex-1 text-white">
+                <div className="flex-1 text-slate-800 dark:text-white">
                     <div className="mb-12">
-                        <img src="/priority_logo.png" alt="Priority Logo" className="w-48 md:w-64 max-w-full" />
+                        <img src="/priority_logo.png" alt="Priority Logo" className="w-48 md:w-64 max-w-full dark:invert" />
                     </div>
 
                     <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">Powering Smarter Supply Chains for</h2>
@@ -216,19 +216,19 @@ function App() {
                             { text: "Automated Consolidation. Lower Freight Costs.", icon: <CheckCircle size={20} className="text-[#8DC63F]" /> },
                             { text: "Built for Scale, Speed & Reliability.", icon: <CheckCircle size={20} className="text-[#8DC63F]" /> }
                         ].map((item, i) => (
-                            <div key={i} className="flex items-center gap-3 text-lg font-medium text-gray-200">
+                            <div key={i} className="flex items-center gap-3 text-lg font-medium text-slate-700 dark:text-gray-200">
                                 {item.icon}
                                 {item.text}
                             </div>
                         ))}
                     </div>
 
-                    <p className="text-xs md:text-sm text-gray-400 font-medium max-w-xl">
+                    <p className="text-xs md:text-sm text-slate-500 dark:text-gray-400 font-medium max-w-xl">
                         Delivering deep operational insights and AI-driven logistics optimization to power the factory floor network.
                     </p>
                 </div>
 
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="w-full max-w-[450px] bg-[#F4F6F0] rounded-2xl p-8 md:p-10 shadow-2xl text-slate-800">
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="w-full max-w-[450px] bg-white dark:bg-[#111111] rounded-2xl p-8 md:p-10 shadow-2xl text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800">
                     <div className="text-center mb-8">
                         <h2 className="text-2xl font-bold flex items-center justify-center gap-2 mb-2">
                             Welcome Back <span role="img" aria-label="wave">👋</span>
@@ -240,22 +240,22 @@ function App() {
 
                     <div className="space-y-5">
                         <div>
-                            <label className="block text-sm font-bold text-slate-700 mb-1.5">User Name</label>
+                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">User Name</label>
                             <input
                                 type="text"
                                 id="logistos_username"
                                 placeholder="E.g., admin or supplier"
-                                className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all"
+                                className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-black focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all text-slate-800 dark:text-slate-100"
                             />
-                            <p className="text-xs text-slate-400 mt-1">Hint: Type 'admin' or 'supplier' to test login.</p>
+                            <p className="text-xs text-slate-500 mt-1">Hint: Type 'admin' or 'supplier' to test login.</p>
                         </div>
                         <div>
-                            <label className="block text-sm font-bold text-slate-700 mb-1.5">Password</label>
+                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
                             <div className="relative">
                                 <input
                                     type="password"
                                     placeholder="Password"
-                                    className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all pr-10"
+                                    className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-black focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-all pr-10 text-slate-800 dark:text-slate-100"
                                 />
                                 <EyeOff size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 cursor-pointer" />
                             </div>
@@ -315,18 +315,18 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 relative">
+        <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 relative transition-colors duration-300">
             {/* Background Logo Watermark */}
-            <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center opacity-5">
-                <img src="/hs_logo.png" alt="High Spirit Logo Watermark" className="w-[80vw] md:w-[50vw] max-w-4xl object-contain" />
+            <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center opacity-10">
+                <img src="/hs_logo.png" alt="High Spirit Logo Watermark" className="w-[80vw] md:w-[50vw] max-w-4xl object-contain mix-blend-multiply dark:invert dark:mix-blend-screen" />
             </div>
 
             {/* Navbar */}
-            <nav className="border-b border-white/10 bg-slate-900/50 backdrop-blur-xl sticky top-0 z-40">
+            <nav className="border-b border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/50 backdrop-blur-xl sticky top-0 z-40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         <div className="flex items-center gap-3">
-                            <img src="/priority_logo.png" alt="Priority Logo" className="h-8 object-contain" />
+                            <img src="/priority_logo.png" alt="Priority Logo" className="h-8 object-contain dark:invert" />
                         </div>
                         <div className="flex items-center space-x-2 sm:space-x-4">
                             <button onClick={() => setActiveTab('dashboard')} className={`nav-link flex items-center gap-2 ${activeTab === 'dashboard' && 'bg-white/5 text-white'}`}><LayoutDashboard size={18} /> <span className="hidden md:block">DASHBOARD</span></button>
@@ -347,7 +347,7 @@ function App() {
                             <div className="flex flex-col md:flex-row justify-between gap-6">
                                 <div>
                                     <h1 className="text-2xl font-bold">WELCOME TO PRIOR1TY, {userRole === 'admin' ? 'ADMINISTRATOR' : currentSupplierName.toUpperCase()}</h1>
-                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Precision logistics monitoring for Prior1ty supply chain network</p>
+                                    <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Precision logistics monitoring for Prior1ty supply chain network</p>
                                 </div>
                                 <div className="flex gap-4">
                                     {userRole === 'admin' && (
@@ -765,7 +765,7 @@ function App() {
                 </AnimatePresence>
             </main>
 
-            <footer className="py-6 border-t border-white/5 bg-slate-900/30">
+            <footer className="py-6 border-t border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-slate-900/30">
                 <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest font-bold text-slate-500">
                     <div className="flex items-center gap-2">
                         <Truck size={12} className="text-brand-500" />
