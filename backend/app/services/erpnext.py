@@ -108,14 +108,22 @@ class ERPNextService:
         try:
             # 1. Update the custom field using set_value (works better for submitted docs)
             set_val_endpoint = f"{self.url}/api/method/frappe.client.set_value"
-            payload = {
-                "doctype": "Purchase Order",
-                "name": po_number,
-                "fieldname": "custom_portal_supply_status",
-                "value": status
-            }
-            response = requests.post(set_val_endpoint, headers=self.headers, json=payload, timeout=5)
-            if response.status_code != 200:
+            
+            # The ERPNext screenshot shows the field name is prepended with 'custom_' twice
+            # because the user likely named it custom_portal_supply_status in the UI
+            fields_to_try = ["custom_custom_portal_supply_status", "custom_portal_supply_status"]
+            
+            for fieldname in fields_to_try:
+                payload = {
+                    "doctype": "Purchase Order",
+                    "name": po_number,
+                    "fieldname": fieldname,
+                    "value": status
+                }
+                response = requests.post(set_val_endpoint, headers=self.headers, json=payload, timeout=5)
+                if response.status_code == 200:
+                    break  # Success, stop trying other field names
+            else:
                  print(f"ERPNext Field Update Note: {response.text}")
             
             # 2. Add a Tag to the PO (Very visible in List View)
