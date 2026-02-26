@@ -559,22 +559,26 @@ function App() {
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Total Weight</div>
-                                            <div className="text-xl font-bold">{plan.total_weight.toLocaleString()} <span className="text-xs font-normal text-slate-500 italic uppercase">kg</span></div>
+                                            <div className="text-xl font-bold">{(plan.total_weight || 0).toLocaleString()} <span className="text-xs font-normal text-slate-500 italic uppercase">kg</span></div>
                                         </div>
                                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Total Volume</div>
-                                            <div className="text-xl font-bold">{plan.total_cbm.toFixed(2)} <span className="text-xs font-normal text-slate-500 italic uppercase">CBM</span></div>
+                                            <div className="text-xl font-bold">{(plan.total_cbm || 0).toFixed(2)} <span className="text-xs font-normal text-slate-500 italic uppercase">CBM</span></div>
                                         </div>
                                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5 group-hover:border-brand-500/30 transition-all">
                                             <div className="text-xs text-slate-500 mb-1 uppercase font-bold tracking-widest">Included POs</div>
                                             <div className="text-xl font-bold flex items-center gap-2">
-                                                {plan.po_ids.length}
+                                                {plan.po_ids?.length || 0}
                                                 <div className="text-[8px] flex flex-wrap gap-1">
-                                                    {plan.po_ids.map(id => (
-                                                        <span key={id} className="bg-brand-500/20 px-1 rounded text-brand-400">
-                                                            {pos.find(p => p.id === id)?.po_number.split('-').pop()}
-                                                        </span>
-                                                    ))}
+                                                    {(plan.po_ids || []).map(id => {
+                                                        const po = pos.find(p => p.id === id);
+                                                        const poStr = po?.po_number?.toString() || '';
+                                                        return (
+                                                            <span key={id} className="bg-brand-500/20 px-1 rounded text-brand-400">
+                                                                {poStr ? poStr.split('-').pop() : id}
+                                                            </span>
+                                                        );
+                                                    })}
                                                 </div>
                                             </div>
                                         </div>
@@ -587,7 +591,7 @@ function App() {
                                     <div className="p-4 bg-brand-500/5 rounded-2xl border border-brand-500/10 flex flex-col md:flex-row justify-between items-center gap-4">
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400"><CheckCircle size={18} /></div>
-                                            <span className="font-bold text-slate-200 text-sm tracking-tight capitalize">Optimized Route: {plan.recommendation.replace('AI PLAN: ', '')}</span>
+                                            <span className="font-bold text-slate-200 text-sm tracking-tight capitalize">Optimized Route: {(plan.recommendation || '').replace('AI PLAN: ', '')}</span>
                                         </div>
                                         <button
                                             onClick={() => handleCreateShipment(plan)}
