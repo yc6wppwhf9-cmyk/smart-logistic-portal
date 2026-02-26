@@ -519,6 +519,7 @@ function App() {
                                             value={dateFilter}
                                             onChange={(e) => setDateFilter(e.target.value)}
                                         />
+                                    </div>
                                     {userRole === 'admin' && (
                                         <div className="flex gap-2">
                                             <button className="bg-white/5 hover:bg-white/10 p-2 rounded-lg border border-white/10" title="Filter View">
