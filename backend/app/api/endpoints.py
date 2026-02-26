@@ -184,7 +184,7 @@ async def upload_purchase_orders(file: UploadFile = File(...), db: Session = Dep
         print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/optimize", response_model=List[schemas.ShipmentBase])
+@router.post("/optimize", response_model=List[schemas.ShipmentCreate])
 def get_optimization(db: Session = Depends(get_db)):
     pending_pos = db.query(models.PurchaseOrder).filter(models.PurchaseOrder.status == "Pending").all()
     if not pending_pos:

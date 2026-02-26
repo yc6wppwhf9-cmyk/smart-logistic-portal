@@ -175,7 +175,10 @@ function App() {
             alert("✅ SHIPMENT DISPATCHED: All POs consolidated and synced.");
         } catch (err) {
             console.error(err);
-            const detail = err.response?.data?.detail || err.message;
+            let detail = err.response?.data?.detail || err.message;
+            if (typeof detail === 'object') {
+                detail = JSON.stringify(detail);
+            }
             alert(`❌ Dispatch Error: ${detail}`);
         } finally {
             setLoading(false);
